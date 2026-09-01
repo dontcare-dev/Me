@@ -65,6 +65,26 @@
       border-radius: 50%;
     }
     
+    .nav-title {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 16px;
+      background: #fff;
+      margin-left: 2px;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    
     .nav-links {
       display: flex;
       gap: 20px;
@@ -402,7 +422,7 @@
     <div class="nav-inner">
       <div class="nav-brand" onclick="window.location.href='index.html'">
         <img src="https://i.ibb.co/gZx6TmQS/image-112855f5.png" alt="Logo">
-        <span>Fisch Realm</span>
+        <span class="nav-title" id="typingText"></span><span class="typing-cursor"></span>
       </div>
       <div class="nav-links">
         <button class="back-btn" onclick="window.location.href='index.html'">
@@ -516,12 +536,47 @@
   </div>
 
   <!-- Audio Element -->
-  <audio id="bgMusic" preload="auto">
+  <audio id="bgMusic" preload="auto" loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
   <script>
+    // Typing Animation for Nav Title
+    const phrases = ["money $ bitch"];
+    const typingElement = document.getElementById('typingText');
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    
+    function type() {
+      const currentPhrase = phrases[phraseIndex];
+      
+      if (isDeleting) {
+        typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+      }
+      
+      let speed = isDeleting ? 50 : 100;
+      
+      if (!isDeleting && charIndex === currentPhrase.length) {
+        speed = 2000;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        speed = 500;
+      }
+      
+      setTimeout(type, speed);
+    }
+    
+    // Start typing animation
+    setTimeout(type, 500);
+    
     // Lanyard API
     const USER_ID = '1418597263479144471';
     const LANYARD_URL = `https://api.lanyard.rest/v1/users/${USER_ID}`;
