@@ -3,70 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deathy · Profile</title>
+  <title>Deathy</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #000;
+      font-family: 'Inter', sans-serif;
+      background: #000 url('https://i.ibb.co/jP9DrNSH/f8fb90452d47c229d2dbaaabaa0aa764.gif') center/cover no-repeat fixed;
       color: #fff;
       line-height: 1.6;
       overflow-x: hidden;
     }
     
-    #aurora-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-    
-    #terminal-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 2999;
-      pointer-events: none;
-      display: none;
-    }
-    
-    #ascii-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1999;
-      pointer-events: none;
-      display: none;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      position: relative;
-      z-index: 1;
-    }
-    
     nav {
-      background: rgba(0,0,0,0.8);
-      padding: 15px 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 12px 0;
       position: fixed;
       top: 0;
       width: 100%;
       z-index: 100;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     
     .nav-inner {
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
       padding: 0 20px;
       display: flex;
@@ -88,8 +53,10 @@
     }
     
     .nav-title {
-      font-weight: bold;
+      font-weight: 800;
       font-size: 14px;
+      color: #888;
+      letter-spacing: 1px;
     }
     
     .typing-cursor {
@@ -109,23 +76,20 @@
     
     .nav-links {
       display: flex;
-      gap: 20px;
+      gap: 15px;
     }
     
     .nav-btn {
       background: none;
       border: none;
       color: #888;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
-      transition: color 0.2s;
+      transition: color 0.3s;
+      font-weight: 600;
     }
     
     .nav-btn:hover {
-      color: #fff;
-    }
-    
-    .nav-btn.active {
       color: #fff;
     }
     
@@ -136,121 +100,302 @@
       border-radius: 20px;
       font-weight: bold;
       text-decoration: none;
-      font-size: 13px;
+      font-size: 12px;
       cursor: pointer;
       border: none;
-      transition: all 0.2s;
+      transition: all 0.3s;
     }
     
     .back-btn:hover {
       background: rgba(255,255,255,0.2);
     }
     
-    .profile-section {
-      padding-top: 100px;
-      text-align: center;
+    .scroller {
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      position: relative;
+      z-index: 1;
     }
     
-    .profile-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 20px;
-      padding: 40px;
+    .scroller::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+    
+    .section {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 100px 20px 40px;
+      background: transparent;
+    }
+    
+    .section-content {
       max-width: 600px;
-      margin: 0 auto;
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
     
-    .profile-avatar {
+    .section-content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .hero {
+      flex-direction: column;
+    }
+    
+    .hero-logo {
       width: 120px;
       height: 120px;
       border-radius: 50%;
-      margin: 0 auto 20px;
-      border: 3px solid rgba(255,255,255,0.1);
-      box-shadow: 0 0 40px rgba(255,255,255,0.1);
+      margin-bottom: 20px;
       display: block;
+      border: 2px solid rgba(255,255,255,0.2);
+      box-shadow: 0 0 40px rgba(255,255,255,0.2);
+      animation: float 4s ease-in-out infinite;
     }
     
-    .profile-name {
-      font-size: 2.5rem;
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .hero-greeting {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 10px;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+    
+    .hero-name {
+      font-size: 4.5rem;
       font-weight: 900;
+      letter-spacing: -3px;
+      margin-bottom: 30px;
+      background: linear-gradient(135deg, #fff, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-desc {
+      font-size: 1.1rem;
+      color: #aaa;
+      line-height: 1.8;
+      margin-bottom: 40px;
+      font-weight: 300;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .tagline {
+      font-size: 0.9rem;
+      color: #888;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .scroll-indicator {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      color: #888;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 10px); }
+    }
+    
+    .socials-list {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    
+    .section-header {
+      font-size: 0.9rem;
+      color: #888;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .social-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .social-item:hover {
+      background: rgba(255,255,255,0.05);
+      padding-left: 30px;
+    }
+    
+    .social-icon {
+      width: 24px;
+      font-size: 1.2rem;
+      color: #888;
+    }
+    
+    .social-name {
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    .social-handle {
+      color: #888;
+      font-size: 0.85rem;
+      margin-left: 10px;
+    }
+    
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3ba55d;
+      display: inline-block;
+      margin-right: 10px;
+      box-shadow: 0 0 10px #3ba55d;
+    }
+    
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .project-card {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 15px;
+      padding: 25px;
+      transition: all 0.3s;
+      cursor: pointer;
+      text-align: center;
+    }
+    
+    .project-card:hover {
+      background: rgba(0,0,0,0.7);
+      transform: translateY(-5px);
+      border-color: rgba(255,255,255,0.15);
+    }
+    
+    .project-icon {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+    
+    .project-name {
+      font-weight: 700;
       margin-bottom: 5px;
     }
     
-    .profile-username {
+    .project-desc {
       color: #888;
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-    }
-    
-    .profile-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.05);
-      padding: 8px 16px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-    }
-    
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    
-    .status-dot.online { background: #3ba55d; box-shadow: 0 0 10px #3ba55d; }
-    .status-dot.idle { background: #faa81a; box-shadow: 0 0 10px #faa81a; }
-    .status-dot.dnd { background: #ed4245; box-shadow: 0 0 10px #ed4245; }
-    .status-dot.offline { background: #747f8d; }
-    
-    .profile-bio {
-      color: #aaa;
-      font-size: 1.1rem;
-      margin-bottom: 30px;
-      line-height: 1.8;
-    }
-    
-    .profile-tags {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 30px;
-    }
-    
-    .tag {
-      background: rgba(255,255,255,0.05);
-      padding: 6px 14px;
-      border-radius: 20px;
       font-size: 0.85rem;
-      color: #888;
     }
     
-    .profile-socials {
+    .notice-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 2000;
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 20px;
-      margin-bottom: 30px;
     }
     
-    .social-link {
-      color: #888;
-      font-size: 1.5rem;
-      transition: all 0.2s;
+    .notice-box {
+      background: rgba(20, 20, 20, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+      animation: slideIn 0.4s ease;
     }
     
-    .social-link:hover {
-      color: #fff;
-      transform: scale(1.2) translateY(-3px);
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
-    .profile-actions {
+    .ascii-art {
+      font-family: monospace;
+      font-size: 0.6rem;
+      line-height: 1.2;
+      color: #faa81a;
+      text-shadow: 0 0 10px rgba(250, 168, 26, 0.5);
+      margin-bottom: 20px;
+      white-space: pre;
+    }
+    
+    .notice-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #faa81a;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .notice-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    .notice-text {
+      color: #aaa;
+      margin-bottom: 25px;
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+    
+    .notice-buttons {
       display: flex;
       gap: 10px;
       justify-content: center;
-      flex-wrap: wrap;
     }
     
     .btn {
@@ -259,7 +404,7 @@
       gap: 8px;
       padding: 10px 24px;
       border-radius: 25px;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.9rem;
       text-decoration: none;
       cursor: pointer;
@@ -288,123 +433,6 @@
       transform: translateY(-2px);
     }
     
-    .projects-section {
-      padding: 60px 0;
-      text-align: center;
-    }
-    
-    .section-title {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 30px;
-    }
-    
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    
-    .project-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 15px;
-      padding: 25px;
-      transition: all 0.3s;
-    }
-    
-    .project-card:hover {
-      background: rgba(255,255,255,0.05);
-      transform: translateY(-5px);
-      border-color: rgba(255,255,255,0.1);
-    }
-    
-    .project-icon {
-      font-size: 2rem;
-      margin-bottom: 15px;
-    }
-    
-    .project-name {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    
-    .project-desc {
-      color: #888;
-      font-size: 0.9rem;
-      margin-bottom: 15px;
-    }
-    
-    .project-link {
-      color: #fff;
-      font-size: 0.85rem;
-      text-decoration: underline;
-    }
-    
-    .notice-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .notice-box {
-      background: rgba(0, 0, 0, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 600px;
-      width: 90%;
-      text-align: center;
-      animation: slideIn 0.5s ease;
-      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-    }
-    
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .notice-icon {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      color: #faa81a;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-    
-    .notice-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    
-    .notice-text {
-      color: #aaa;
-      margin-bottom: 30px;
-      line-height: 1.8;
-    }
-    
-    .notice-buttons {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    
     .blurred {
       filter: blur(5px);
       pointer-events: none;
@@ -421,7 +449,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(0, 0, 0, 0.9);
       z-index: 3000;
       display: none;
       align-items: center;
@@ -433,75 +461,53 @@
     }
     
     .terminal-box {
-      background: rgba(10, 10, 10, 0.9);
-      border: 1px solid rgba(0, 255, 0, 0.3);
-      border-radius: 12px;
-      padding: 30px;
-      max-width: 700px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      border-radius: 10px;
+      padding: 25px;
+      max-width: 600px;
       width: 90%;
       font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      box-shadow: 
-        0 0 40px rgba(0, 255, 0, 0.1),
-        inset 0 0 40px rgba(0, 255, 0, 0.05);
-      animation: terminalIn 0.5s ease;
-    }
-    
-    @keyframes terminalIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
+      font-size: 0.85rem;
+      box-shadow: 0 0 30px rgba(0, 255, 0, 0.1);
     }
     
     .terminal-header {
       display: flex;
       gap: 8px;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
       border-bottom: 1px solid rgba(0, 255, 0, 0.2);
     }
     
     .terminal-dot {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
-      animation: dotPulse 2s infinite;
     }
     
-    @keyframes dotPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    
-    .terminal-dot.red { background: #ff5f56; animation-delay: 0s; }
-    .terminal-dot.yellow { background: #ffbd2e; animation-delay: 0.2s; }
-    .terminal-dot.green { background: #27c93f; animation-delay: 0.4s; }
+    .terminal-dot.red { background: #ff5f56; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green { background: #27c93f; }
     
     .terminal-title {
       color: #888;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       margin-left: auto;
     }
     
     .terminal-output {
       color: #0f0;
       line-height: 1.8;
-      min-height: 250px;
-      text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+      min-height: 200px;
     }
     
     .terminal-line {
       margin-bottom: 5px;
-      animation: fadeInLine 0.3s ease;
-    }
-    
-    @keyframes fadeInLine {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
     }
     
     .terminal-prompt {
       color: #0f0;
-      font-weight: bold;
     }
     
     .terminal-command {
@@ -518,22 +524,26 @@
       padding: 30px;
       color: #888;
       font-size: 0.85rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
       position: relative;
       z-index: 1;
     }
     
     @media (max-width: 600px) {
-      .profile-card {
-        padding: 20px;
+      .hero-name {
+        font-size: 3rem;
       }
       
-      .profile-name {
-        font-size: 2rem;
+      .hero-desc {
+        font-size: 1rem;
       }
       
-      .profile-socials {
-        gap: 15px;
+      .social-item {
+        padding: 12px 15px;
+      }
+      
+      .social-handle {
+        display: block;
+        margin-left: 0;
       }
       
       .projects-grid {
@@ -541,17 +551,17 @@
       }
       
       .terminal-box {
-        padding: 20px;
-        font-size: 0.8rem;
+        padding: 15px;
+        font-size: 0.75rem;
+      }
+      
+      .ascii-art {
+        font-size: 0.4rem;
       }
     }
   </style>
 </head>
 <body>
-
-  <canvas id="aurora-canvas"></canvas>
-  <canvas id="ascii-canvas"></canvas>
-  <canvas id="terminal-canvas"></canvas>
 
   <nav>
     <div class="nav-inner">
@@ -561,108 +571,93 @@
       </div>
       <div class="nav-links">
         <button class="back-btn" onclick="window.location.href='index.html'">
-          <i class="fas fa-arrow-left"></i> Back to Site
+          <i class="fas fa-arrow-left"></i> Back
         </button>
       </div>
     </div>
   </nav>
 
-  <div class="container blurred" id="mainContent">
-    <div class="profile-section">
-      <div class="profile-card">
-        <img src="" alt="Deathy" class="profile-avatar" id="devAvatar" />
-        <h1 class="profile-name" id="devName">Deathy</h1>
-        <div class="profile-username" id="devUsername">@deathy</div>
-        
-        <div class="profile-status">
-          <span class="status-dot" id="statusDot"></span>
-          <span id="devStatusText">Loading...</span>
+  <div class="scroller blurred" id="mainScroller">
+    <div class="section hero" id="section-hero">
+      <div class="section-content" data-animate>
+        <img src="" alt="Deathy" class="hero-logo" id="devAvatar" />
+        <div class="hero-greeting">hey, i'm</div>
+        <h1 class="hero-name" id="devName">deathy.</h1>
+        <div class="hero-desc">
+          just a random person ^^
+          <br><br>
+          mostly self-taught, probably listening to
+          <br>
+          music right now.
         </div>
-        
-        <p class="profile-bio">Just a random person ^^</p>
-        
-        <div class="profile-tags">
-          <span class="tag"><i class="fas fa-code"></i> Developer</span>
-          <span class="tag"><i class="fas fa-robot"></i> Bot Creator</span>
-          <span class="tag"><i class="fas fa-server"></i> Server Owner</span>
-          <span class="tag"><i class="fas fa-music"></i> Music Lover</span>
-        </div>
-        
-        <div class="profile-socials">
-          <a href="https://dontcare-dev.github.io/Deathy.2v.dev/" target="_blank" class="social-link" title="Portfolio">
-            <i class="fas fa-globe"></i>
+        <div class="tagline">scroll to explore</div>
+        <div class="scroll-indicator">↓</div>
+      </div>
+    </div>
+
+    <div class="section" id="section-socials">
+      <div class="section-content" data-animate>
+        <div class="section-header">find me at</div>
+        <div class="socials-list">
+          <div class="social-item">
+            <span class="online-dot" id="statusDot"></span>
+            <span class="social-name" id="devStatusText">Loading...</span>
+          </div>
+          <a href="https://github.com/dontcare-dev" target="_blank" class="social-item">
+            <i class="fab fa-github social-icon"></i>
+            <span class="social-name">github</span>
+            <span class="social-handle">/ dontcare-dev</span>
           </a>
-          <a href="https://github.com/dontcare-dev" target="_blank" class="social-link" title="GitHub">
-            <i class="fab fa-github"></i>
+          <a href="https://dontcare-dev.github.io/Deathy.2v.dev/" target="_blank" class="social-item">
+            <i class="fas fa-globe social-icon"></i>
+            <span class="social-name">portfolio</span>
+            <span class="social-handle">/ Deathy.2v.dev</span>
           </a>
-          <a href="#" id="devDiscordLink" class="social-link" title="Discord">
-            <i class="fab fa-discord"></i>
-          </a>
-        </div>
-        
-        <div class="profile-actions">
-          <a href="https://dontcare-dev.github.io/Deathy.2v.dev/" target="_blank" class="btn btn-white">
-            <i class="fas fa-globe"></i> Portfolio
-          </a>
-          <a href="https://github.com/dontcare-dev" target="_blank" class="btn btn-outline">
-            <i class="fab fa-github"></i> GitHub
+          <a href="#" id="devDiscordLink" class="social-item">
+            <i class="fab fa-discord social-icon"></i>
+            <span class="social-name">discord</span>
+            <span class="social-handle">/ @deathy</span>
           </a>
         </div>
       </div>
     </div>
 
-    <div class="projects-section">
-      <h2 class="section-title">Projects</h2>
-      
-      <div class="projects-grid">
-        <div class="project-card">
-          <div class="project-icon">
-            <i class="fas fa-globe"></i>
-          </div>
-          <h3 class="project-name">Fisch Realm Website</h3>
-          <p class="project-desc">Website for my Discord server and bot</p>
-          <a href="https://dontcare-dev.github.io/-/" target="_blank" class="project-link">Visit Site <i class="fas fa-external-link-alt"></i></a>
-        </div>
-        
-        <div class="project-card">
-          <div class="project-icon">
-            <i class="fas fa-robot"></i>
-          </div>
-          <h3 class="project-name">Numinous Bot</h3>
-          <p class="project-desc">Multi-purpose Discord bot with music, AI, tickets, and more</p>
-          <a href="https://discord.com/oauth2/authorize?client_id=1537532403558518876" target="_blank" class="project-link">Invite Bot <i class="fas fa-external-link-alt"></i></a>
-        </div>
-        
-        <div class="project-card">
-          <div class="project-icon">
-            <i class="fas fa-server"></i>
-          </div>
-          <h3 class="project-name">Servers Using My Bot</h3>
-          <p class="project-desc">Multiple Discord servers using Numinous for music and moderation</p>
-          <a href="https://discord.gg/fischrealm" target="_blank" class="project-link">Join Server <i class="fas fa-external-link-alt"></i></a>
+    <div class="section" id="section-projects">
+      <div class="section-content" data-animate>
+        <div class="section-header">projects</div>
+        <div class="projects-grid">
+          <a href="https://dontcare-dev.github.io/-/" target="_blank" class="project-card">
+            <div class="project-icon"><i class="fas fa-globe"></i></div>
+            <div class="project-name">Fisch Realm</div>
+            <div class="project-desc">Website for Discord server</div>
+          </a>
+          <a href="https://discord.com/oauth2/authorize?client_id=1537532403558518876" target="_blank" class="project-card">
+            <div class="project-icon"><i class="fas fa-robot"></i></div>
+            <div class="project-name">Numinous</div>
+            <div class="project-desc">Discord bot with music</div>
+          </a>
+          <a href="https://discord.gg/fischrealm" target="_blank" class="project-card">
+            <div class="project-icon"><i class="fas fa-server"></i></div>
+            <div class="project-name">Servers</div>
+            <div class="project-desc">Using my bot</div>
+          </a>
         </div>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>© 2026 Deathy · Made with <i class="fas fa-heart"></i></p>
+    <p>© 2026 Deathy</p>
   </footer>
 
   <div class="notice-overlay" id="noticeOverlay">
     <div class="notice-box">
       <div class="ascii-art" id="asciiArtContainer"></div>
-      <div class="notice-icon">
-        <i class="fas fa-exclamation-triangle"></i>
-      </div>
-      <h2 class="notice-title">NOTICE</h2>
-      <p class="notice-text">
-        After August 4 I will be focusing fully on exams so services will be down!
-      </p>
+      <div class="notice-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <div class="notice-title">Notice</div>
+      <p class="notice-text">After August 4 I will be focusing fully on exams so services will be down!</p>
       <div class="notice-buttons">
-        <button class="btn btn-white" onclick="acceptNotice()">
-          <i class="fas fa-check"></i> OK
-        </button>
+        <button class="btn btn-white" onclick="acceptNotice()"><i class="fas fa-check"></i> OK</button>
       </div>
     </div>
   </div>
@@ -681,7 +676,6 @@
 
   <audio id="bgMusic" preload="auto" loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
   </audio>
 
   <script>
@@ -692,17 +686,12 @@
       try {
         const res = await fetch(LANYARD_URL);
         const data = await res.json();
-        
-        if (data.success) {
-          updateUI(data.data);
-        } else {
-          throw new Error('Invalid response');
-        }
+        if (data.success) updateUI(data.data);
+        else throw new Error('Invalid response');
       } catch (err) {
-        document.getElementById('devName').textContent = 'Deathy';
-        document.getElementById('devUsername').textContent = '@deathy';
+        document.getElementById('devName').textContent = 'deathy';
         document.getElementById('devStatusText').textContent = 'Offline';
-        document.getElementById('statusDot').className = 'status-dot offline';
+        document.getElementById('statusDot').style.background = '#747f8d';
         document.getElementById('devAvatar').src = 'https://cdn.discordapp.com/avatars/1418597263479144471/unknown.png?size=128';
       }
     }
@@ -711,15 +700,10 @@
       const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=128`;
       document.getElementById('devAvatar').src = avatarUrl;
       document.getElementById('navLogo').src = avatarUrl;
-      document.getElementById('devName').textContent = data.discord_user.global_name || data.discord_user.username;
-      document.getElementById('devUsername').textContent = '@' + data.discord_user.username;
-      
+      document.getElementById('devName').textContent = (data.discord_user.global_name || data.discord_user.username).toLowerCase();
       const status = data.discord_status || 'offline';
-      document.getElementById('statusDot').className = `status-dot ${status}`;
-      
       const statusMap = { online: 'Online', idle: 'Idle', dnd: 'Do Not Disturb', offline: 'Offline' };
       document.getElementById('devStatusText').textContent = statusMap[status] || 'Offline';
-      
       document.getElementById('devDiscordLink').href = `https://discord.com/users/${data.discord_user.id}`;
     }
 
@@ -734,128 +718,22 @@
       ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   
     `;
 
-    function createAsciiArt() {
-      const container = document.getElementById('asciiArtContainer');
-      container.style.fontFamily = 'monospace';
-      container.style.fontSize = '0.6rem';
-      container.style.lineHeight = '1.2';
-      container.style.color = '#faa81a';
-      container.style.textShadow = '0 0 10px rgba(250, 168, 26, 0.5)';
-      container.style.marginBottom = '20px';
-      container.style.whiteSpace = 'pre';
-      container.textContent = asciiArt;
-    }
-
-    createAsciiArt();
+    document.getElementById('asciiArtContainer').textContent = asciiArt;
 
     function acceptNotice() {
       const overlay = document.getElementById('noticeOverlay');
-      const mainContent = document.getElementById('mainContent');
+      const mainScroller = document.getElementById('mainScroller');
       const terminalOverlay = document.getElementById('terminalOverlay');
-      const terminalCanvas = document.getElementById('terminal-canvas');
-      const asciiCanvas = document.getElementById('ascii-canvas');
-      
+      const audio = document.getElementById('bgMusic');
       overlay.style.display = 'none';
-      mainContent.classList.add('blurred');
-      
+      mainScroller.classList.add('blurred');
       terminalOverlay.classList.add('active');
-      terminalCanvas.style.display = 'block';
-      asciiCanvas.style.display = 'block';
-      
-      initTerminalWebGL();
-      initAsciiWebGL();
       startTerminal();
-    }
-
-    function initAsciiWebGL() {
-      const canvas = document.getElementById('ascii-canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      
-      if (!gl) return;
-      
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      
-      const vertexShaderSource = `
-        attribute vec2 a_position;
-        void main() {
-          gl_Position = vec4(a_position, 0.0, 1.0);
-        }
-      `;
-      
-      const fragmentShaderSource = `
-        precision highp float;
-        uniform vec2 u_resolution;
-        uniform float u_time;
-        
-        float hash(vec2 p) {
-          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
-        }
-        
-        void main() {
-          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          float time = u_time * 0.3;
-          
-          vec3 color = vec3(0.0);
-          
-          float grid = sin(uv.x * 50.0) * sin(uv.y * 50.0);
-          color += vec3(grid * 0.1);
-          
-          float glow = sin(uv.x * 10.0 + time) * sin(uv.y * 10.0 + time) * 0.5 + 0.5;
-          color += vec3(0.5, 0.3, 0.0) * glow * 0.3;
-          
-          float vignette = 1.0 - length(uv - 0.5) * 1.5;
-          color *= vignette;
-          
-          gl_FragColor = vec4(color, 1.0);
-        }
-      `;
-      
-      function createShader(type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        return shader;
-      }
-      
-      const vertexShader = createShader(gl.VERTEX_SHADER, vertexShaderSource);
-      const fragmentShader = createShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
-      
-      const program = gl.createProgram();
-      gl.attachShader(program, vertexShader);
-      gl.attachShader(program, fragmentShader);
-      gl.linkProgram(program);
-      gl.useProgram(program);
-      
-      const positionBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-      
-      const positionLocation = gl.getAttribLocation(program, 'a_position');
-      gl.enableVertexAttribArray(positionLocation);
-      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-      
-      const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
-      const timeLocation = gl.getUniformLocation(program, 'u_time');
-      
-      const startTime = performance.now();
-      
-      function render() {
-        const currentTime = (performance.now() - startTime) / 1000;
-        gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-        gl.uniform1f(timeLocation, currentTime);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        requestAnimationFrame(render);
-      }
-      
-      render();
     }
 
     function startTerminal() {
       const terminalOutput = document.getElementById('terminalOutput');
       terminalOutput.innerHTML = '';
-      
       const lines = [
         { prompt: '$', cmd: 'npm install deploythy', output: '> deploying@1.0.0' },
         { prompt: '$', cmd: 'npm run build', output: '> building project...' },
@@ -864,70 +742,61 @@
         { prompt: '$', cmd: 'node numinous.js', output: '> bot online' },
         { prompt: '$', cmd: 'play music', output: '> playing music...' }
       ];
-      
       let lineIndex = 0;
       let charIndex = 0;
-      
       function typeLine() {
-        if (lineIndex >= lines.length) {
-          setTimeout(finishTerminal, 1000);
-          return;
-        }
-        
+        if (lineIndex >= lines.length) { setTimeout(finishTerminal, 800); return; }
         const line = lines[lineIndex];
         const lineElement = document.createElement('div');
         lineElement.className = 'terminal-line';
-        
-        if (line.cmd) {
-          lineElement.innerHTML = `<span class="terminal-prompt">${line.prompt} </span><span class="terminal-command"></span>`;
-          terminalOutput.appendChild(lineElement);
-          
-          const cmdElement = lineElement.querySelector('.terminal-command');
-          
-          function typeCmd() {
-            if (charIndex <= line.cmd.length) {
-              cmdElement.textContent = line.cmd.substring(0, charIndex);
-              charIndex++;
-              setTimeout(typeCmd, 50);
-            } else {
-              if (line.output) {
-                const outputElement = document.createElement('div');
-                outputElement.className = 'terminal-line terminal-output-line';
-                outputElement.textContent = line.output;
-                terminalOutput.appendChild(outputElement);
-              }
-              lineIndex++;
-              charIndex = 0;
-              setTimeout(typeLine, 200);
+        lineElement.innerHTML = `<span class="terminal-prompt">${line.prompt} </span><span class="terminal-command"></span>`;
+        terminalOutput.appendChild(lineElement);
+        const cmdElement = lineElement.querySelector('.terminal-command');
+        function typeCmd() {
+          if (charIndex <= line.cmd.length) {
+            cmdElement.textContent = line.cmd.substring(0, charIndex);
+            charIndex++;
+            setTimeout(typeCmd, 60);
+          } else {
+            if (line.output) {
+              const outputElement = document.createElement('div');
+              outputElement.className = 'terminal-line terminal-output-line';
+              outputElement.textContent = line.output;
+              terminalOutput.appendChild(outputElement);
             }
+            lineIndex++;
+            charIndex = 0;
+            setTimeout(typeLine, 250);
           }
-          
-          typeCmd();
-        } else {
-          lineElement.textContent = line.output;
-          terminalOutput.appendChild(lineElement);
-          lineIndex++;
-          setTimeout(typeLine, 200);
         }
+        typeCmd();
       }
-      
       typeLine();
     }
 
     function finishTerminal() {
       const terminalOverlay = document.getElementById('terminalOverlay');
-      const mainContent = document.getElementById('mainContent');
+      const mainScroller = document.getElementById('mainScroller');
       const audio = document.getElementById('bgMusic');
-      const terminalCanvas = document.getElementById('terminal-canvas');
-      const asciiCanvas = document.getElementById('ascii-canvas');
-      
       terminalOverlay.classList.remove('active');
-      terminalCanvas.style.display = 'none';
-      asciiCanvas.style.display = 'none';
-      mainContent.classList.remove('blurred');
-      
+      mainScroller.classList.remove('blurred');
       audio.volume = 0.4;
       audio.play().catch(e => console.log('Audio play failed:', e));
+      observeSections();
+    }
+
+    function observeSections() {
+      const sections = document.querySelectorAll('.section-content[data-animate]');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0.3 });
+      sections.forEach(section => observer.observe(section));
     }
 
     const phrases = ["money $ bitch"];
@@ -935,10 +804,8 @@
     let phraseIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
-    
     function type() {
       const currentPhrase = phrases[phraseIndex];
-      
       if (isDeleting) {
         typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
         charIndex--;
@@ -946,9 +813,7 @@
         typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
         charIndex++;
       }
-      
       let speed = isDeleting ? 50 : 100;
-      
       if (!isDeleting && charIndex === currentPhrase.length) {
         speed = 2000;
         isDeleting = true;
@@ -957,225 +822,9 @@
         phraseIndex = (phraseIndex + 1) % phrases.length;
         speed = 500;
       }
-      
       setTimeout(type, speed);
     }
-    
     setTimeout(type, 500);
-
-    function initTerminalWebGL() {
-      const canvas = document.getElementById('terminal-canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      
-      if (!gl) return;
-      
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      
-      const vertexShaderSource = `
-        attribute vec2 a_position;
-        void main() {
-          gl_Position = vec4(a_position, 0.0, 1.0);
-        }
-      `;
-      
-      const fragmentShaderSource = `
-        precision highp float;
-        uniform vec2 u_resolution;
-        uniform float u_time;
-        
-        void main() {
-          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          float time = u_time * 0.5;
-          
-          vec3 color = vec3(0.0);
-          
-          float glow = sin(uv.x * 20.0 + time) * sin(uv.y * 20.0 + time) * 0.5 + 0.5;
-          color += vec3(0.0, glow * 0.3, 0.0);
-          
-          float scanline = sin(uv.y * 100.0 + time * 10.0) * 0.1;
-          color += vec3(0.0, scanline, 0.0);
-          
-          float vignette = 1.0 - length(uv - 0.5) * 1.5;
-          color *= vignette;
-          
-          gl_FragColor = vec4(color, 1.0);
-        }
-      `;
-      
-      function createShader(type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        return shader;
-      }
-      
-      const vertexShader = createShader(gl.VERTEX_SHADER, vertexShaderSource);
-      const fragmentShader = createShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
-      
-      const program = gl.createProgram();
-      gl.attachShader(program, vertexShader);
-      gl.attachShader(program, fragmentShader);
-      gl.linkProgram(program);
-      gl.useProgram(program);
-      
-      const positionBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-      
-      const positionLocation = gl.getAttribLocation(program, 'a_position');
-      gl.enableVertexAttribArray(positionLocation);
-      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-      
-      const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
-      const timeLocation = gl.getUniformLocation(program, 'u_time');
-      
-      const startTime = performance.now();
-      
-      function render() {
-        const currentTime = (performance.now() - startTime) / 1000;
-        gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-        gl.uniform1f(timeLocation, currentTime);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        requestAnimationFrame(render);
-      }
-      
-      render();
-    }
-
-    (function initAurora() {
-      const canvas = document.getElementById('aurora-canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      
-      if (!gl) {
-        canvas.style.display = 'none';
-        return;
-      }
-
-      function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        gl.viewport(0, 0, canvas.width, canvas.height);
-      }
-      
-      window.addEventListener('resize', resize);
-      resize();
-
-      const vertexShaderSource = `
-        attribute vec2 a_position;
-        void main() {
-          gl_Position = vec4(a_position, 0.0, 1.0);
-        }
-      `;
-
-      const fragmentShaderSource = `
-        precision highp float;
-        uniform vec2 u_resolution;
-        uniform float u_time;
-        
-        float hash(vec2 p) {
-          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
-        }
-        
-        float noise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          f = f * f * (3.0 - 2.0 * f);
-          
-          float a = hash(i);
-          float b = hash(i + vec2(1.0, 0.0));
-          float c = hash(i + vec2(0.0, 1.0));
-          float d = hash(i + vec2(1.0, 1.0));
-          
-          return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
-        }
-        
-        float fbm(vec2 p) {
-          float value = 0.0;
-          float amplitude = 0.5;
-          for (int i = 0; i < 6; i++) {
-            value += amplitude * noise(p);
-            p *= 2.0;
-            amplitude *= 0.5;
-          }
-          return value;
-        }
-        
-        void main() {
-          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-          vec2 p = uv;
-          p.x *= u_resolution.x / u_resolution.y;
-          
-          float time = u_time * 0.1;
-          
-          vec2 q = vec2(fbm(p + time * 0.1), fbm(p + vec2(5.2, 1.3) - time * 0.1));
-          vec2 r = vec2(fbm(p + 4.0 * q + vec2(1.7, 9.2) + time * 0.15), fbm(p + 4.0 * q + vec2(8.3, 2.8) - time * 0.15));
-          float f = fbm(p + 4.0 * r);
-          
-          vec3 color = mix(vec3(0.0), vec3(0.1, 0.2, 0.4), f);
-          color = mix(color, vec3(0.2, 0.1, 0.4), length(q));
-          color = mix(color, vec3(0.5, 0.6, 0.8), length(r));
-          
-          color *= 1.5;
-          
-          float vignette = 1.0 - length(uv - 0.5) * 1.5;
-          color *= vignette;
-          
-          vec2 starPos = p * 100.0;
-          vec2 starCell = floor(starPos);
-          vec2 starFrac = fract(starPos) - 0.5;
-          float star = hash(starCell);
-          if (star > 0.98) {
-            float dist = length(starFrac);
-            if (dist < 0.1) {
-              color += vec3(0.8, 0.9, 1.0) * (0.1 - dist);
-            }
-          }
-          
-          gl_FragColor = vec4(color, 1.0);
-        }
-      `;
-
-      function createShader(type, source) {
-        const shader = gl.createShader(type);
-        gl.shaderSource(shader, source);
-        gl.compileShader(shader);
-        return shader;
-      }
-
-      const vertexShader = createShader(gl.VERTEX_SHADER, vertexShaderSource);
-      const fragmentShader = createShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
-
-      const program = gl.createProgram();
-      gl.attachShader(program, vertexShader);
-      gl.attachShader(program, fragmentShader);
-      gl.linkProgram(program);
-      gl.useProgram(program);
-
-      const positionBuffer = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-
-      const positionLocation = gl.getAttribLocation(program, 'a_position');
-      gl.enableVertexAttribArray(positionLocation);
-      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-      const resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
-      const timeLocation = gl.getUniformLocation(program, 'u_time');
-
-      const startTime = performance.now();
-
-      function render() {
-        const currentTime = (performance.now() - startTime) / 1000;
-        gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-        gl.uniform1f(timeLocation, currentTime);
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        requestAnimationFrame(render);
-      }
-
-      render();
-    })();
   </script>
 </body>
 </html>
