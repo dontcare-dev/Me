@@ -19,7 +19,7 @@
     }
     
     nav {
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.7);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       padding: 12px 0;
@@ -27,7 +27,7 @@
       top: 0;
       width: 100%;
       z-index: 100;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     
     .nav-inner {
@@ -55,7 +55,7 @@
     .nav-title {
       font-weight: 800;
       font-size: 14px;
-      color: #888;
+      color: #fff;
       letter-spacing: 1px;
     }
     
@@ -82,7 +82,7 @@
     .nav-btn {
       background: none;
       border: none;
-      color: #888;
+      color: #aaa;
       font-size: 13px;
       cursor: pointer;
       transition: color 0.3s;
@@ -143,6 +143,11 @@
       opacity: 0;
       transform: translateY(40px);
       transition: opacity 0.8s ease, transform 0.8s ease;
+      background: rgba(0,0,0,0.4);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
     
     .section-content.visible {
@@ -160,8 +165,8 @@
       border-radius: 50%;
       margin-bottom: 20px;
       display: block;
-      border: 2px solid rgba(255,255,255,0.2);
-      box-shadow: 0 0 40px rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: 0 0 40px rgba(255,255,255,0.3);
       animation: float 4s ease-in-out infinite;
     }
     
@@ -172,10 +177,11 @@
     
     .hero-greeting {
       font-size: 1.2rem;
-      color: #aaa;
+      color: #ccc;
       margin-bottom: 10px;
       font-weight: 300;
       letter-spacing: 0.5px;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
     
     .hero-name {
@@ -183,30 +189,95 @@
       font-weight: 900;
       letter-spacing: -3px;
       margin-bottom: 30px;
-      background: linear-gradient(135deg, #fff, #888);
+      background: linear-gradient(135deg, #fff, #ccc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      text-shadow: 0 0 20px rgba(255,255,255,0.3);
     }
     
     .hero-desc {
       font-size: 1.1rem;
-      color: #aaa;
+      color: #ccc;
       line-height: 1.8;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       font-weight: 300;
       max-width: 400px;
       margin-left: auto;
       margin-right: auto;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+    
+    .views-counter {
+      margin: 20px auto;
+      max-width: 300px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 15px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .views-counter img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+    }
+    
+    .views-label {
+      font-size: 0.7rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    .ist-clock {
+      margin: 20px auto;
+      max-width: 400px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 15px;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .ist-label {
+      font-size: 0.7rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    
+    .ist-time {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+    
+    .ist-date {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-top: 5px;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
     
     .tagline {
       font-size: 0.9rem;
-      color: #888;
+      color: #aaa;
       letter-spacing: 3px;
       text-transform: uppercase;
       margin-bottom: 10px;
       font-weight: 600;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
     
     .scroll-indicator {
@@ -215,10 +286,11 @@
       left: 50%;
       transform: translateX(-50%);
       font-size: 0.8rem;
-      color: #888;
+      color: #ccc;
       letter-spacing: 2px;
       text-transform: uppercase;
       animation: bounce 2s infinite;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
     
     @keyframes bounce {
@@ -234,12 +306,13 @@
     
     .section-header {
       font-size: 0.9rem;
-      color: #888;
+      color: #aaa;
       letter-spacing: 3px;
       text-transform: uppercase;
       margin-bottom: 30px;
       font-weight: 600;
       text-align: center;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
     
     .social-item {
@@ -247,30 +320,32 @@
       align-items: center;
       gap: 15px;
       padding: 15px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       transition: all 0.3s;
       cursor: pointer;
     }
     
     .social-item:hover {
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.1);
       padding-left: 30px;
     }
     
     .social-icon {
       width: 24px;
       font-size: 1.2rem;
-      color: #888;
+      color: #ccc;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
     
     .social-name {
       color: #fff;
       font-weight: 600;
       font-size: 0.95rem;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
     
     .social-handle {
-      color: #888;
+      color: #aaa;
       font-size: 0.85rem;
       margin-left: 10px;
     }
@@ -293,8 +368,8 @@
     }
     
     .project-card {
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.15);
       border-radius: 15px;
       padding: 25px;
       transition: all 0.3s;
@@ -303,24 +378,28 @@
     }
     
     .project-card:hover {
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.8);
       transform: translateY(-5px);
-      border-color: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
     }
     
     .project-icon {
       font-size: 2rem;
       margin-bottom: 15px;
+      text-shadow: 0 0 20px rgba(255,255,255,0.5);
     }
     
     .project-name {
       font-weight: 700;
       margin-bottom: 5px;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
     
     .project-desc {
-      color: #888;
+      color: #aaa;
       font-size: 0.85rem;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
     
     .notice-overlay {
@@ -439,84 +518,11 @@
       user-select: none;
     }
     
-    #bgMusic {
-      display: none;
-    }
-    
-    .terminal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 3000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .terminal-overlay.active {
-      display: flex;
-    }
-    
-    .terminal-box {
-      background: rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(0, 255, 0, 0.2);
-      border-radius: 10px;
-      padding: 25px;
-      max-width: 600px;
-      width: 90%;
-      font-family: 'Courier New', monospace;
-      font-size: 0.85rem;
-      box-shadow: 0 0 30px rgba(0, 255, 0, 0.1);
-    }
-    
-    .terminal-header {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 15px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(0, 255, 0, 0.2);
-    }
-    
-    .terminal-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-    
-    .terminal-dot.red { background: #ff5f56; }
-    .terminal-dot.yellow { background: #ffbd2e; }
-    .terminal-dot.green { background: #27c93f; }
-    
-    .terminal-title {
-      color: #888;
-      font-size: 0.75rem;
-      margin-left: auto;
-    }
-    
-    .terminal-output {
-      color: #0f0;
-      line-height: 1.8;
-      min-height: 200px;
-    }
-    
-    .terminal-line {
-      margin-bottom: 5px;
-    }
-    
-    .terminal-prompt {
-      color: #0f0;
-    }
-    
-    .terminal-command {
-      color: #fff;
-    }
-    
-    .terminal-output-line {
-      color: #888;
-      margin-left: 20px;
+    #ytPlayer {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
     }
     
     footer {
@@ -550,13 +556,8 @@
         grid-template-columns: 1fr;
       }
       
-      .terminal-box {
-        padding: 15px;
-        font-size: 0.75rem;
-      }
-      
-      .ascii-art {
-        font-size: 0.4rem;
+      .ist-time {
+        font-size: 2rem;
       }
     }
   </style>
@@ -590,6 +591,18 @@
           <br>
           music right now.
         </div>
+        
+        <div class="views-counter">
+          <div class="views-label">views</div>
+          <img src="https://count.getloli.com/@deathy" alt="Moe Counter" />
+        </div>
+        
+        <div class="ist-clock">
+          <div class="ist-label">IST Time</div>
+          <div class="ist-time" id="istTime">--:--:--</div>
+          <div class="ist-date" id="istDate">Loading...</div>
+        </div>
+        
         <div class="tagline">scroll to explore</div>
         <div class="scroll-indicator">↓</div>
       </div>
@@ -662,23 +675,67 @@
     </div>
   </div>
 
-  <div class="terminal-overlay" id="terminalOverlay">
-    <div class="terminal-box">
-      <div class="terminal-header">
-        <div class="terminal-dot red"></div>
-        <div class="terminal-dot yellow"></div>
-        <div class="terminal-dot green"></div>
-        <span class="terminal-title">deathy@fisch-realm: ~</span>
-      </div>
-      <div class="terminal-output" id="terminalOutput"></div>
-    </div>
-  </div>
-
-  <audio id="bgMusic" preload="auto" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
-  </audio>
+  <div id="ytPlayer"></div>
 
   <script>
+    var player;
+    var musicPlayRequested = false;
+    var playerReady = false;
+    var TRACK_ID = 'yzTuBuRdAyA';
+
+    window.onYouTubeIframeAPIReady = function() {
+      player = new YT.Player('ytPlayer', {
+        height: '0',
+        width: '0',
+        videoId: TRACK_ID,
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          loop: 1,
+          playlist: TRACK_ID,
+          enablejsapi: 1
+        },
+        events: {
+          onReady: function(event) {
+            playerReady = true;
+            event.target.setVolume(70);
+            if (musicPlayRequested) {
+              player.unMute();
+              player.playVideo();
+            }
+          }
+        }
+      });
+    };
+
+    function startMusic() {
+      musicPlayRequested = true;
+      if (player && playerReady) {
+        player.unMute();
+        player.setVolume(70);
+        player.playVideo();
+      } else {
+        var retries = 0;
+        var checkPlayer = setInterval(function() {
+          retries++;
+          if (player && playerReady) {
+            clearInterval(checkPlayer);
+            player.unMute();
+            player.setVolume(70);
+            player.playVideo();
+          }
+          if (retries > 50) {
+            clearInterval(checkPlayer);
+          }
+        }, 200);
+      }
+    }
+
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
     const USER_ID = '1418597263479144471';
     const LANYARD_URL = `https://api.lanyard.rest/v1/users/${USER_ID}`;
 
@@ -723,80 +780,13 @@
     function acceptNotice() {
       const overlay = document.getElementById('noticeOverlay');
       const mainScroller = document.getElementById('mainScroller');
-      const terminalOverlay = document.getElementById('terminalOverlay');
-      const audio = document.getElementById('bgMusic');
+      
       overlay.style.display = 'none';
-      mainScroller.classList.add('blurred');
-      terminalOverlay.classList.add('active');
-      startTerminal();
-    }
-
-    function startTerminal() {
-      const terminalOutput = document.getElementById('terminalOutput');
-      terminalOutput.innerHTML = '';
-      const lines = [
-        { prompt: '$', cmd: 'npm install deploythy', output: '> deploying@1.0.0' },
-        { prompt: '$', cmd: 'npm run build', output: '> building project...' },
-        { prompt: '$', cmd: 'git push origin main', output: '> pushing to github...' },
-        { prompt: '$', cmd: 'systemctl start fisch-realm', output: '> service started' },
-        { prompt: '$', cmd: 'node numinous.js', output: '> bot online' },
-        { prompt: '$', cmd: 'play music', output: '> playing music...' }
-      ];
-      let lineIndex = 0;
-      let charIndex = 0;
-      function typeLine() {
-        if (lineIndex >= lines.length) { setTimeout(finishTerminal, 800); return; }
-        const line = lines[lineIndex];
-        const lineElement = document.createElement('div');
-        lineElement.className = 'terminal-line';
-        lineElement.innerHTML = `<span class="terminal-prompt">${line.prompt} </span><span class="terminal-command"></span>`;
-        terminalOutput.appendChild(lineElement);
-        const cmdElement = lineElement.querySelector('.terminal-command');
-        function typeCmd() {
-          if (charIndex <= line.cmd.length) {
-            cmdElement.textContent = line.cmd.substring(0, charIndex);
-            charIndex++;
-            setTimeout(typeCmd, 60);
-          } else {
-            if (line.output) {
-              const outputElement = document.createElement('div');
-              outputElement.className = 'terminal-line terminal-output-line';
-              outputElement.textContent = line.output;
-              terminalOutput.appendChild(outputElement);
-            }
-            lineIndex++;
-            charIndex = 0;
-            setTimeout(typeLine, 250);
-          }
-        }
-        typeCmd();
-      }
-      typeLine();
-    }
-
-    function finishTerminal() {
-      const terminalOverlay = document.getElementById('terminalOverlay');
-      const mainScroller = document.getElementById('mainScroller');
-      const audio = document.getElementById('bgMusic');
-      terminalOverlay.classList.remove('active');
       mainScroller.classList.remove('blurred');
-      audio.volume = 0.4;
-      audio.play().catch(e => console.log('Audio play failed:', e));
+      
+      startMusic();
+      
       observeSections();
-    }
-
-    function observeSections() {
-      const sections = document.querySelectorAll('.section-content[data-animate]');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          } else {
-            entry.target.classList.remove('visible');
-          }
-        });
-      }, { threshold: 0.3 });
-      sections.forEach(section => observer.observe(section));
     }
 
     const phrases = ["money $ bitch"];
@@ -825,6 +815,49 @@
       setTimeout(type, speed);
     }
     setTimeout(type, 500);
+
+    function updateISTClock() {
+      const now = new Date();
+      const istTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+      
+      let hours = istTime.getHours();
+      const minutes = istTime.getMinutes().toString().padStart(2, '0');
+      const seconds = istTime.getSeconds().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      hours = hours.toString().padStart(2, '0');
+      
+      document.getElementById('istTime').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+      
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      
+      const dayName = days[istTime.getDay()];
+      const monthName = months[istTime.getMonth()];
+      const date = istTime.getDate();
+      const year = istTime.getFullYear();
+      
+      document.getElementById('istDate').textContent = `${dayName}, ${monthName} ${date}, ${year}`;
+    }
+
+    updateISTClock();
+    setInterval(updateISTClock, 1000);
+
+    function observeSections() {
+      const sections = document.querySelectorAll('.section-content[data-animate]');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, { threshold: 0.3 });
+      sections.forEach(section => observer.observe(section));
+    }
   </script>
 </body>
 </html>
