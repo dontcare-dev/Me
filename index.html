@@ -518,11 +518,12 @@
       user-select: none;
     }
     
-    #ytPlayer {
+    #musicFrame {
       position: absolute;
       width: 0;
       height: 0;
       overflow: hidden;
+      border: none;
     }
     
     footer {
@@ -675,66 +676,30 @@
     </div>
   </div>
 
-  <div id="ytPlayer"></div>
+  <iframe id="musicFrame" src="about:blank" allow="autoplay; encrypted-media" title="music"></iframe>
 
   <script>
-    var player;
-    var musicPlayRequested = false;
-    var playerReady = false;
-    var TRACK_ID = 'yzTuBuRdAyA';
+    var musicStarted = false;
 
-    window.onYouTubeIframeAPIReady = function() {
-      player = new YT.Player('ytPlayer', {
-        height: '0',
-        width: '0',
-        videoId: TRACK_ID,
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          loop: 1,
-          playlist: TRACK_ID,
-          enablejsapi: 1
-        },
-        events: {
-          onReady: function(event) {
-            playerReady = true;
-            event.target.setVolume(70);
-            if (musicPlayRequested) {
-              player.unMute();
-              player.playVideo();
-            }
-          }
-        }
-      });
-    };
-
-    function startMusic() {
-      musicPlayRequested = true;
-      if (player && playerReady) {
-        player.unMute();
-        player.setVolume(70);
-        player.playVideo();
-      } else {
-        var retries = 0;
-        var checkPlayer = setInterval(function() {
-          retries++;
-          if (player && playerReady) {
-            clearInterval(checkPlayer);
-            player.unMute();
-            player.setVolume(70);
-            player.playVideo();
-          }
-          if (retries > 50) {
-            clearInterval(checkPlayer);
-          }
-        }, 200);
-      }
+    function acceptNotice() {
+      const overlay = document.getElementById('noticeOverlay');
+      const mainScroller = document.getElementById('mainScroller');
+      
+      overlay.style.display = 'none';
+      mainScroller.classList.remove('blurred');
+      
+      startMusic();
+      
+      observeSections();
     }
 
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    function startMusic() {
+      if (musicStarted) return;
+      musicStarted = true;
+      
+      const frame = document.getElementById('musicFrame');
+      frame.src = 'https://www.youtube.com/embed/yzTuBuRdAyA?autoplay=1&loop=1&playlist=yzTuBuRdAyA&controls=0&showinfo=0&rel=0';
+    }
 
     const USER_ID = '1418597263479144471';
     const LANYARD_URL = `https://api.lanyard.rest/v1/users/${USER_ID}`;
@@ -776,18 +741,6 @@
     `;
 
     document.getElementById('asciiArtContainer').textContent = asciiArt;
-
-    function acceptNotice() {
-      const overlay = document.getElementById('noticeOverlay');
-      const mainScroller = document.getElementById('mainScroller');
-      
-      overlay.style.display = 'none';
-      mainScroller.classList.remove('blurred');
-      
-      startMusic();
-      
-      observeSections();
-    }
 
     const phrases = ["money $ bitch"];
     const typingElement = document.getElementById('typingText');
