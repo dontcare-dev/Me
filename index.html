@@ -518,11 +518,8 @@
       user-select: none;
     }
     
-    #ytPlayer {
-      position: absolute;
-      width: 0;
-      height: 0;
-      overflow: hidden;
+    #bgMusic {
+      display: none;
     }
     
     footer {
@@ -675,67 +672,12 @@
     </div>
   </div>
 
-  <div id="ytPlayer"></div>
+  <audio id="bgMusic" preload="auto" loop>
+    <source src="https://files.catbox.moe/86w3hd.mp4" type="audio/mp4">
+    <source src="https://files.catbox.moe/86w3hd.mp4" type="video/mp4">
+  </audio>
 
   <script>
-    var player;
-    var musicPlayRequested = false;
-    var playerReady = false;
-    var TRACK_ID = 'sd-r7QqM5Uk';
-
-    window.onYouTubeIframeAPIReady = function() {
-      player = new YT.Player('ytPlayer', {
-        height: '0',
-        width: '0',
-        videoId: TRACK_ID,
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          loop: 1,
-          playlist: TRACK_ID,
-          enablejsapi: 1
-        },
-        events: {
-          onReady: function(event) {
-            playerReady = true;
-            event.target.setVolume(70);
-            if (musicPlayRequested) {
-              player.unMute();
-              player.playVideo();
-            }
-          }
-        }
-      });
-    };
-
-    function startMusic() {
-      musicPlayRequested = true;
-      if (player && playerReady) {
-        player.unMute();
-        player.setVolume(70);
-        player.playVideo();
-      } else {
-        var retries = 0;
-        var checkPlayer = setInterval(function() {
-          retries++;
-          if (player && playerReady) {
-            clearInterval(checkPlayer);
-            player.unMute();
-            player.setVolume(70);
-            player.playVideo();
-          }
-          if (retries > 50) {
-            clearInterval(checkPlayer);
-          }
-        }, 200);
-      }
-    }
-
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
     const USER_ID = '1418597263479144471';
     const LANYARD_URL = `https://api.lanyard.rest/v1/users/${USER_ID}`;
 
@@ -780,11 +722,13 @@
     function acceptNotice() {
       const overlay = document.getElementById('noticeOverlay');
       const mainScroller = document.getElementById('mainScroller');
+      const audio = document.getElementById('bgMusic');
       
       overlay.style.display = 'none';
       mainScroller.classList.remove('blurred');
       
-      startMusic();
+      audio.volume = 0.7;
+      audio.play().catch(e => console.log('Audio play failed:', e));
       
       observeSections();
     }
