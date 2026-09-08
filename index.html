@@ -525,6 +525,93 @@
       overflow: hidden;
     }
     
+    .music-panel {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 500;
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 280px;
+    }
+    
+    .music-panel.hidden {
+      display: none;
+    }
+    
+    .music-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    
+    .music-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.05);
+    }
+    
+    .music-btn.active {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-color: #f59e0b;
+    }
+    
+    .music-btn.next {
+      font-size: 0.8rem;
+      width: 35px;
+      height: 35px;
+    }
+    
+    .volume-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 80px;
+      height: 4px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.2);
+      outline: none;
+      cursor: pointer;
+    }
+    
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #f59e0b;
+      cursor: pointer;
+    }
+    
+    .volume-slider::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #f59e0b;
+      cursor: pointer;
+    }
+    
+    .volume-icon {
+      color: #fff;
+      font-size: 0.9rem;
+    }
+    
     footer {
       text-align: center;
       padding: 30px;
@@ -558,6 +645,12 @@
       
       .ist-time {
         font-size: 2rem;
+      }
+      
+      .music-panel {
+        bottom: 10px;
+        right: 10px;
+        max-width: 220px;
       }
     }
   </style>
@@ -677,22 +770,35 @@
 
   <div id="ytPlayer"></div>
 
+  <div class="music-panel hidden" id="musicPanel">
+    <button class="music-btn" id="playPauseBtn">
+      <i class="fas fa-play" id="playIcon"></i>
+    </button>
+    <button class="music-btn next" id="skipBtn">
+      <i class="fas fa-forward"></i>
+    </button>
+    <i class="fas fa-volume-up volume-icon"></i>
+    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
+  </div>
+
   <script>
     var player;
     var musicPlayRequested = false;
     var playerReady = false;
-    var TRACK_ID = 'yzTuBuRdAyA';
+    var currentTrack = 'yzTuBuRdAyA';
+    var tracks = ['yzTuBuRdAyA', 'hXCIH5VTWyg'];
+    var currentIndex = 0;
+    var isPlaying = false;
 
     window.onYouTubeIframeAPIReady = function() {
       player = new YT.Player('ytPlayer', {
         height: '0',
         width: '0',
-        videoId: TRACK_ID,
+        videoId: currentTrack,
         playerVars: {
           autoplay: 0,
           controls: 0,
-          loop: 1,
-          playlist: TRACK_ID,
+          loop: 0,
           enablejsapi: 1
         },
         events: {
@@ -703,10 +809,32 @@
               player.unMute();
               player.playVideo();
             }
+          },
+          onStateChange: function(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+              isPlaying = true;
+              document.getElementById('playIcon').className = 'fas fa-pause';
+              document.getElementById('playPauseBtn').classList.add('active');
+              document.getElementById('musicPanel').classList.remove('hidden');
+            } else if (event.data === YT.PlayerState.PAUSED) {
+              isPlaying = false;
+              document.getElementById('playIcon').className = 'fas fa-play';
+              document.getElementById('playPauseBtn').classList.remove('active');
+            } else if (event.data === YT.PlayerState.ENDED) {
+              currentIndex = (currentIndex + 1) % tracks.length;
+              loadTrack(tracks[currentIndex]);
+            }
           }
         }
       });
     };
+
+    function loadTrack(trackId) {
+      if (player && playerReady) {
+        player.loadVideoById(trackId);
+        player.playVideo();
+      }
+    }
 
     function startMusic() {
       musicPlayRequested = true;
@@ -730,6 +858,38 @@
         }, 200);
       }
     }
+
+    function togglePlayPause() {
+      if (!player || !playerReady) return;
+      
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.unMute();
+        player.playVideo();
+      }
+    }
+
+    function skipTrack() {
+      currentIndex = (currentIndex + 1) % tracks.length;
+      currentTrack = tracks[currentIndex];
+      loadTrack(currentTrack);
+    }
+
+    document.getElementById('playPauseBtn').addEventListener('click', togglePlayPause);
+    document.getElementById('skipBtn').addEventListener('click', skipTrack);
+
+    document.getElementById('volumeSlider').addEventListener('input', function() {
+      var v = parseInt(this.value);
+      if (player && playerReady) {
+        player.setVolume(v);
+        if (v === 0) {
+          player.mute();
+        } else {
+          player.unMute();
+        }
+      }
+    });
 
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
