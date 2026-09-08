@@ -402,128 +402,11 @@
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
     
-    .notice-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .notice-box {
-      background: rgba(20, 20, 20, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 500px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(0,0,0,0.5);
-      animation: slideIn 0.4s ease;
-    }
-    
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .ascii-art {
-      font-family: monospace;
-      font-size: 0.6rem;
-      line-height: 1.2;
-      color: #faa81a;
-      text-shadow: 0 0 10px rgba(250, 168, 26, 0.5);
-      margin-bottom: 20px;
-      white-space: pre;
-    }
-    
-    .notice-icon {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      color: #faa81a;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-    
-    .notice-title {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    
-    .notice-text {
-      color: #aaa;
-      margin-bottom: 25px;
-      line-height: 1.8;
-      font-size: 0.95rem;
-    }
-    
-    .notice-buttons {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 24px;
-      border-radius: 25px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: none;
-    }
-    
-    .btn-white {
-      background: #fff;
-      color: #000;
-    }
-    
-    .btn-white:hover {
-      background: #ddd;
-      transform: translateY(-2px);
-    }
-    
-    .btn-outline {
-      background: transparent;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-    
-    .btn-outline:hover {
-      border-color: #fff;
-      transform: translateY(-2px);
-    }
-    
-    .blurred {
-      filter: blur(5px);
-      pointer-events: none;
-      user-select: none;
-    }
-    
-    #musicFrame {
+    #ytPlayer {
       position: absolute;
       width: 0;
       height: 0;
       overflow: hidden;
-      border: none;
     }
     
     footer {
@@ -579,7 +462,7 @@
     </div>
   </nav>
 
-  <div class="scroller blurred" id="mainScroller">
+  <div class="scroller" id="mainScroller">
     <div class="section hero" id="section-hero">
       <div class="section-content" data-animate>
         <img src="" alt="Deathy" class="hero-logo" id="devAvatar" />
@@ -676,29 +559,60 @@
     </div>
   </div>
 
-  <iframe id="musicFrame" src="about:blank" allow="autoplay; encrypted-media" title="music"></iframe>
+  <div id="ytPlayer"></div>
 
   <script>
+    var player;
     var musicStarted = false;
+    var TRACK_ID = 'yzTuBuRdAyA';
+
+    window.onYouTubeIframeAPIReady = function() {
+      player = new YT.Player('ytPlayer', {
+        height: '0',
+        width: '0',
+        videoId: TRACK_ID,
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          loop: 1,
+          playlist: TRACK_ID,
+          enablejsapi: 1
+        },
+        events: {
+          onReady: function(event) {
+            event.target.setVolume(70);
+            if (musicStarted) {
+              player.unMute();
+              player.playVideo();
+            }
+          }
+        }
+      });
+    };
+
+    function startMusic() {
+      musicStarted = true;
+      if (player) {
+        player.unMute();
+        player.setVolume(70);
+        player.playVideo();
+      }
+    }
+
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     function acceptNotice() {
       const overlay = document.getElementById('noticeOverlay');
       const mainScroller = document.getElementById('mainScroller');
       
       overlay.style.display = 'none';
-      mainScroller.classList.remove('blurred');
       
       startMusic();
       
       observeSections();
-    }
-
-    function startMusic() {
-      if (musicStarted) return;
-      musicStarted = true;
-      
-      const frame = document.getElementById('musicFrame');
-      frame.src = 'https://www.youtube.com/embed/yzTuBuRdAyA?autoplay=1&loop=1&playlist=yzTuBuRdAyA&controls=0&showinfo=0&rel=0';
     }
 
     const USER_ID = '1418597263479144471';
