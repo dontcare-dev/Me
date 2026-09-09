@@ -17,7 +17,7 @@
       line-height: 1.6;
       overflow-x: hidden;
     }
-    
+
     #bgVideo {
       position: fixed;
       top: 0;
@@ -27,7 +27,7 @@
       object-fit: cover;
       z-index: -2;
     }
-    
+
     .bg-overlay {
       position: fixed;
       top: 0;
@@ -37,7 +37,7 @@
       background: rgba(0,0,0,0.4);
       z-index: -1;
     }
-    
+
     nav {
       background: rgba(0,0,0,0.7);
       backdrop-filter: blur(10px);
@@ -49,7 +49,7 @@
       z-index: 100;
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
-    
+
     .nav-inner {
       max-width: 800px;
       margin: 0 auto;
@@ -58,27 +58,27 @@
       justify-content: space-between;
       align-items: center;
     }
-    
+
     .nav-brand {
       display: flex;
       align-items: center;
       gap: 10px;
       cursor: pointer;
     }
-    
+
     .nav-brand img {
       width: 32px;
       height: 32px;
       border-radius: 50%;
     }
-    
+
     .nav-title {
       font-weight: 800;
       font-size: 14px;
       color: #fff;
       letter-spacing: 1px;
     }
-    
+
     .typing-cursor {
       display: inline-block;
       width: 2px;
@@ -88,17 +88,17 @@
       animation: blink 1s infinite;
       vertical-align: middle;
     }
-    
+
     @keyframes blink {
       0%, 50% { opacity: 1; }
       51%, 100% { opacity: 0; }
     }
-    
+
     .nav-links {
       display: flex;
       gap: 15px;
     }
-    
+
     .nav-btn {
       background: none;
       border: none;
@@ -108,11 +108,11 @@
       transition: color 0.3s;
       font-weight: 600;
     }
-    
+
     .nav-btn:hover {
       color: #fff;
     }
-    
+
     .back-btn {
       background: rgba(255,255,255,0.1);
       color: #fff;
@@ -125,11 +125,11 @@
       border: none;
       transition: all 0.3s;
     }
-    
+
     .back-btn:hover {
       background: rgba(255,255,255,0.2);
     }
-    
+
     .scroller {
       height: 100vh;
       overflow-y: scroll;
@@ -138,12 +138,12 @@
       position: relative;
       z-index: 1;
     }
-    
+
     .scroller::-webkit-scrollbar {
       width: 0;
       height: 0;
     }
-    
+
     .section {
       min-height: 100vh;
       scroll-snap-align: start;
@@ -155,7 +155,7 @@
       padding: 100px 20px 40px;
       background: transparent;
     }
-    
+
     .section-content {
       max-width: 600px;
       width: 100%;
@@ -169,16 +169,16 @@
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
     }
-    
+
     .section-content.visible {
       opacity: 1;
       transform: translateY(0);
     }
-    
+
     .hero {
       flex-direction: column;
     }
-    
+
     .hero-logo {
       width: 120px;
       height: 120px;
@@ -189,12 +189,12 @@
       box-shadow: 0 0 40px rgba(255,255,255,0.3);
       animation: float 4s ease-in-out infinite;
     }
-    
+
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
-    
+
     .hero-greeting {
       font-size: 1.2rem;
       color: #ccc;
@@ -203,7 +203,7 @@
       letter-spacing: 0.5px;
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-    
+
     .hero-name {
       font-size: 4.5rem;
       font-weight: 900;
@@ -215,7 +215,7 @@
       background-clip: text;
       text-shadow: 0 0 20px rgba(255,255,255,0.3);
     }
-    
+
     .hero-desc {
       font-size: 1.1rem;
       color: #ccc;
@@ -227,7 +227,7 @@
       margin-right: auto;
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-    
+
     .views-counter {
       margin: 20px auto;
       max-width: 300px;
@@ -238,14 +238,14 @@
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
     }
-    
+
     .views-counter img {
       width: 100%;
       height: auto;
       border-radius: 10px;
       display: block;
     }
-    
+
     .views-label {
       font-size: 0.7rem;
       color: #aaa;
@@ -254,7 +254,7 @@
       margin-bottom: 8px;
       font-weight: 600;
     }
-    
+
     .ist-clock {
       margin: 20px auto;
       max-width: 400px;
@@ -265,7 +265,7 @@
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
     }
-    
+
     .ist-label {
       font-size: 0.7rem;
       color: #aaa;
@@ -274,7 +274,7 @@
       margin-bottom: 8px;
       font-weight: 600;
     }
-    
+
     .ist-time {
       font-size: 2.5rem;
       font-weight: 900;
@@ -282,14 +282,14 @@
       font-family: 'JetBrains Mono', monospace;
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-    
+
     .ist-date {
       font-size: 0.9rem;
       color: #ccc;
       margin-top: 5px;
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
-    
+
     .tagline {
       font-size: 0.9rem;
       color: #aaa;
@@ -299,7 +299,7 @@
       font-weight: 600;
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-    
+
     .scroll-indicator {
       position: absolute;
       bottom: 20px;
@@ -312,18 +312,18 @@
       animation: bounce 2s infinite;
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-    
+
     @keyframes bounce {
       0%, 100% { transform: translate(-50%, 0); }
       50% { transform: translate(-50%, 10px); }
     }
-    
+
     .socials-list {
       max-width: 500px;
       margin: 0 auto;
       text-align: left;
     }
-    
+
     .section-header {
       font-size: 0.9rem;
       color: #aaa;
@@ -334,7 +334,7 @@
       text-align: center;
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-    
+
     .social-item {
       display: flex;
       align-items: center;
@@ -344,32 +344,32 @@
       transition: all 0.3s;
       cursor: pointer;
     }
-    
+
     .social-item:hover {
       background: rgba(255,255,255,0.1);
       padding-left: 30px;
     }
-    
+
     .social-icon {
       width: 24px;
       font-size: 1.2rem;
       color: #ccc;
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
-    
+
     .social-name {
       color: #fff;
       font-weight: 600;
       font-size: 0.95rem;
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-    
+
     .social-handle {
       color: #aaa;
       font-size: 0.85rem;
       margin-left: 10px;
     }
-    
+
     .online-dot {
       width: 8px;
       height: 8px;
@@ -379,14 +379,14 @@
       margin-right: 10px;
       box-shadow: 0 0 10px #3ba55d;
     }
-    
+
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 15px;
       margin-top: 30px;
     }
-    
+
     .project-card {
       background: rgba(0,0,0,0.6);
       border: 1px solid rgba(255,255,255,0.15);
@@ -396,32 +396,32 @@
       cursor: pointer;
       text-align: center;
     }
-    
+
     .project-card:hover {
       background: rgba(0,0,0,0.8);
       transform: translateY(-5px);
       border-color: rgba(255,255,255,0.3);
     }
-    
+
     .project-icon {
       font-size: 2rem;
       margin-bottom: 15px;
       text-shadow: 0 0 20px rgba(255,255,255,0.5);
     }
-    
+
     .project-name {
       font-weight: 700;
       margin-bottom: 5px;
       color: #fff;
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-    
+
     .project-desc {
       color: #aaa;
       font-size: 0.85rem;
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
-    
+
     .notice-overlay {
       position: fixed;
       top: 0;
@@ -436,7 +436,7 @@
       align-items: center;
       justify-content: center;
     }
-    
+
     .notice-box {
       background: rgba(20, 20, 20, 0.95);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -448,12 +448,12 @@
       box-shadow: 0 0 40px rgba(0,0,0,0.5);
       animation: slideIn 0.4s ease;
     }
-    
+
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
+
     .ascii-art {
       font-family: monospace;
       font-size: 0.6rem;
@@ -463,19 +463,19 @@
       margin-bottom: 20px;
       white-space: pre;
     }
-    
+
     .notice-icon {
       font-size: 2.5rem;
       margin-bottom: 15px;
       color: #faa81a;
       animation: pulse 2s infinite;
     }
-    
+
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.1); }
     }
-    
+
     .notice-title {
       font-size: 1.3rem;
       font-weight: 800;
@@ -483,20 +483,20 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-    
+
     .notice-text {
       color: #aaa;
       margin-bottom: 25px;
       line-height: 1.8;
       font-size: 0.95rem;
     }
-    
+
     .notice-buttons {
       display: flex;
       gap: 10px;
       justify-content: center;
     }
-    
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -510,41 +510,41 @@
       transition: all 0.3s;
       border: none;
     }
-    
+
     .btn-white {
       background: #fff;
       color: #000;
     }
-    
+
     .btn-white:hover {
       background: #ddd;
       transform: translateY(-2px);
     }
-    
+
     .btn-outline {
       background: transparent;
       color: #fff;
       border: 1px solid rgba(255,255,255,0.3);
     }
-    
+
     .btn-outline:hover {
       border-color: #fff;
       transform: translateY(-2px);
     }
-    
+
     .blurred {
       filter: blur(5px);
       pointer-events: none;
       user-select: none;
     }
-    
+
     #ytPlayer {
       position: absolute;
       width: 0;
       height: 0;
       overflow: hidden;
     }
-    
+
     footer {
       text-align: center;
       padding: 30px;
@@ -553,29 +553,29 @@
       position: relative;
       z-index: 1;
     }
-    
+
     @media (max-width: 600px) {
       .hero-name {
         font-size: 3rem;
       }
-      
+
       .hero-desc {
         font-size: 1rem;
       }
-      
+
       .social-item {
         padding: 12px 15px;
       }
-      
+
       .social-handle {
         display: block;
         margin-left: 0;
       }
-      
+
       .projects-grid {
         grid-template-columns: 1fr;
       }
-      
+
       .ist-time {
         font-size: 2rem;
       }
@@ -616,18 +616,18 @@
           <br>
           music right now.
         </div>
-        
+
         <div class="views-counter">
           <div class="views-label">views</div>
           <img src="https://count.getloli.com/@deathy" alt="Moe Counter" />
         </div>
-        
+
         <div class="ist-clock">
           <div class="ist-label">IST Time</div>
           <div class="ist-time" id="istTime">--:--:--</div>
           <div class="ist-date" id="istDate">Loading...</div>
         </div>
-        
+
         <div class="tagline">scroll to explore</div>
         <div class="scroll-indicator">↓</div>
       </div>
@@ -706,6 +706,7 @@
     var player;
     var musicPlayRequested = false;
     var playerReady = false;
+    var hasEntered = false;
     var TRACK_ID = 'hXCIH5VTWyg';
 
     window.onYouTubeIframeAPIReady = function() {
@@ -803,14 +804,17 @@
     document.getElementById('asciiArtContainer').textContent = asciiArt;
 
     function acceptNotice() {
+      if (hasEntered) return;
+      hasEntered = true;
+
       const overlay = document.getElementById('noticeOverlay');
       const mainScroller = document.getElementById('mainScroller');
-      
+
       overlay.style.display = 'none';
       mainScroller.classList.remove('blurred');
-      
+
       startMusic();
-      
+
       observeSections();
     }
 
@@ -844,26 +848,26 @@
     function updateISTClock() {
       const now = new Date();
       const istTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-      
+
       let hours = istTime.getHours();
       const minutes = istTime.getMinutes().toString().padStart(2, '0');
       const seconds = istTime.getSeconds().toString().padStart(2, '0');
       const ampm = hours >= 12 ? 'PM' : 'AM';
-      
+
       hours = hours % 12;
       hours = hours ? hours : 12;
       hours = hours.toString().padStart(2, '0');
-      
+
       document.getElementById('istTime').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-      
+
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      
+
       const dayName = days[istTime.getDay()];
       const monthName = months[istTime.getMonth()];
       const date = istTime.getDate();
       const year = istTime.getFullYear();
-      
+
       document.getElementById('istDate').textContent = `${dayName}, ${monthName} ${date}, ${year}`;
     }
 
