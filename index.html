@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Deathy</title>
+  <title>Nyx</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -16,6 +16,8 @@
       color: #fff;
       line-height: 1.6;
       overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
     }
 
     #bgVideo {
@@ -34,393 +36,177 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.5);
       z-index: -1;
     }
 
-    nav {
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 12px 0;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 100;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .nav-inner {
-      max-width: 800px;
+    .container {
+      max-width: 600px;
       margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-    }
-
-    .nav-brand img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-    }
-
-    .nav-title {
-      font-weight: 800;
-      font-size: 14px;
-      color: #fff;
-      letter-spacing: 1px;
-    }
-
-    .typing-cursor {
-      display: inline-block;
-      width: 2px;
-      height: 16px;
-      background: #fff;
-      margin-left: 2px;
-      animation: blink 1s infinite;
-      vertical-align: middle;
-    }
-
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 15px;
-    }
-
-    .nav-btn {
-      background: none;
-      border: none;
-      color: #aaa;
-      font-size: 13px;
-      cursor: pointer;
-      transition: color 0.3s;
-      font-weight: 600;
-    }
-
-    .nav-btn:hover {
-      color: #fff;
-    }
-
-    .back-btn {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: bold;
-      text-decoration: none;
-      font-size: 12px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s;
-    }
-
-    .back-btn:hover {
-      background: rgba(255,255,255,0.2);
-    }
-
-    .scroller {
-      height: 100vh;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
+      padding: 40px 20px 60px;
       position: relative;
       z-index: 1;
     }
 
-    .scroller::-webkit-scrollbar {
-      width: 0;
-      height: 0;
+    .header {
+      text-align: center;
+      padding-top: 40px;
+      padding-bottom: 30px;
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      display: block;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+    }
+
+    .name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .title {
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      color: #888;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .section {
-      min-height: 100vh;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      padding: 100px 20px 40px;
-      background: transparent;
-    }
-
-    .section-content {
-      max-width: 600px;
-      width: 100%;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-      background: rgba(0,0,0,0.4);
-      border-radius: 20px;
-      padding: 30px;
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-    }
-
-    .section-content.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .hero {
-      flex-direction: column;
-    }
-
-    .hero-logo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      margin-bottom: 20px;
-      display: block;
-      border: 2px solid rgba(255,255,255,0.3);
-      box-shadow: 0 0 40px rgba(255,255,255,0.3);
-      animation: float 4s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .hero-greeting {
-      font-size: 1.2rem;
-      color: #ccc;
-      margin-bottom: 10px;
-      font-weight: 300;
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-
-    .hero-name {
-      font-size: 4.5rem;
-      font-weight: 900;
-      letter-spacing: -3px;
       margin-bottom: 30px;
-      background: linear-gradient(135deg, #fff, #ccc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 20px rgba(255,255,255,0.3);
     }
 
-    .hero-desc {
-      font-size: 1.1rem;
-      color: #ccc;
-      line-height: 1.8;
-      margin-bottom: 30px;
-      font-weight: 300;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-
-    .views-counter {
-      margin: 20px auto;
-      max-width: 300px;
-      background: rgba(0,0,0,0.3);
-      border-radius: 15px;
-      padding: 10px;
-      border: 1px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-    }
-
-    .views-label {
-      font-size: 0.7rem;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-
-    .views-number {
-      font-size: 2.5rem;
-      font-weight: 900;
-      font-family: 'JetBrains Mono', monospace;
-      color: #fff;
-      text-shadow: 0 0 20px rgba(255,255,255,0.5);
-    }
-
-    .ist-clock {
-      margin: 20px auto;
-      max-width: 400px;
-      background: rgba(0,0,0,0.3);
-      border-radius: 15px;
-      padding: 15px;
-      border: 1px solid rgba(255,255,255,0.1);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-    }
-
-    .ist-label {
-      font-size: 0.7rem;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-      font-weight: 600;
-    }
-
-    .ist-time {
-      font-size: 2.5rem;
-      font-weight: 900;
-      letter-spacing: 2px;
-      font-family: 'JetBrains Mono', monospace;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-
-    .ist-date {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-top: 5px;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
-    }
-
-    .tagline {
-      font-size: 0.9rem;
-      color: #aaa;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      font-weight: 600;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-
-    .scroll-indicator {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.8rem;
-      color: #ccc;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      animation: bounce 2s infinite;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translate(-50%, 0); }
-      50% { transform: translate(-50%, 10px); }
-    }
-
-    .socials-list {
-      max-width: 500px;
-      margin: 0 auto;
-      text-align: left;
-    }
-
-    .section-header {
-      font-size: 0.9rem;
-      color: #aaa;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 30px;
-      font-weight: 600;
-      text-align: center;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-
-    .social-item {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 15px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-
-    .social-item:hover {
-      background: rgba(255,255,255,0.1);
-      padding-left: 30px;
-    }
-
-    .social-icon {
-      width: 24px;
-      font-size: 1.2rem;
-      color: #ccc;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
-    }
-
-    .social-name {
-      color: #fff;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
-
-    .social-handle {
-      color: #aaa;
+    .section-title {
       font-size: 0.85rem;
-      margin-left: 10px;
+      color: #aaa;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 600;
     }
 
-    .online-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #3ba55d;
-      display: inline-block;
-      margin-right: 10px;
-      box-shadow: 0 0 10px #3ba55d;
+    .about-text {
+      color: #ccc;
+      font-size: 1rem;
+      line-height: 1.7;
     }
 
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    .stack-list {
+      display: flex;
+      flex-wrap: wrap;
       gap: 15px;
-      margin-top: 30px;
+    }
+
+    .stack-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .stack-item svg {
+      width: 18px;
+      height: 18px;
     }
 
     .project-card {
-      background: rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 15px;
-      padding: 25px;
-      transition: all 0.3s;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       cursor: pointer;
-      text-align: center;
+      transition: all 0.3s;
+      text-decoration: none;
     }
 
     .project-card:hover {
-      background: rgba(0,0,0,0.8);
-      transform: translateY(-5px);
-      border-color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
     }
 
-    .project-icon {
-      font-size: 2rem;
-      margin-bottom: 15px;
-      text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    .project-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
     }
 
-    .project-name {
-      font-weight: 700;
-      margin-bottom: 5px;
+    .project-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .project-title {
+      font-weight: 600;
+      font-size: 1rem;
       color: #fff;
-      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+      margin-bottom: 3px;
     }
 
     .project-desc {
+      color: #888;
+      font-size: 0.8rem;
+    }
+
+    .project-arrow {
+      color: #888;
+      font-size: 1rem;
+    }
+
+    .connect-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 13px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      transition: all 0.3s;
+      margin-bottom: 10px;
+    }
+
+    .connect-item:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .connect-icon {
       color: #aaa;
-      font-size: 0.85rem;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      font-size: 1.1rem;
+    }
+
+    .connect-label {
+      font-size: 0.9rem;
+      color: #ccc;
     }
 
     .notice-overlay {
@@ -429,9 +215,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
+      background: rgba(0, 0, 0, 0.9);
       z-index: 2000;
       display: flex;
       align-items: center;
@@ -439,104 +223,111 @@
     }
 
     .notice-box {
-      background: rgba(20, 20, 20, 0.95);
+      background: #111;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 500px;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 400px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 0 40px rgba(0,0,0,0.5);
-      animation: slideIn 0.4s ease;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .ascii-art {
-      font-family: monospace;
-      font-size: 0.6rem;
-      line-height: 1.2;
-      color: #faa81a;
-      text-shadow: 0 0 10px rgba(250, 168, 26, 0.5);
-      margin-bottom: 20px;
-      white-space: pre;
     }
 
     .notice-icon {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      color: #faa81a;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #f59e0b;
     }
 
     .notice-title {
-      font-size: 1.3rem;
-      font-weight: 800;
+      font-size: 1.1rem;
+      font-weight: 700;
       margin-bottom: 10px;
-      letter-spacing: 1px;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .notice-text {
       color: #aaa;
-      margin-bottom: 25px;
-      line-height: 1.8;
-      font-size: 0.95rem;
-    }
-
-    .notice-buttons {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 24px;
-      border-radius: 25px;
-      font-weight: 700;
+      margin-bottom: 20px;
       font-size: 0.9rem;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: none;
+      line-height: 1.7;
     }
 
     .btn-white {
       background: #fff;
       color: #000;
-    }
-
-    .btn-white:hover {
-      background: #ddd;
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-
-    .btn-outline:hover {
-      border-color: #fff;
-      transform: translateY(-2px);
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
     }
 
     .blurred {
       filter: blur(5px);
       pointer-events: none;
       user-select: none;
+    }
+
+    .guestbook-form {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    .form-input:focus {
+      border-color: #f59e0b;
+    }
+
+    .form-input::placeholder {
+      color: #666;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .send-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .send-btn:hover {
+      opacity: 0.9;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #888;
+      font-size: 0.8rem;
+      position: relative;
+      z-index: 1;
     }
 
     #ytPlayer {
@@ -546,38 +337,8 @@
       overflow: hidden;
     }
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #888;
-      font-size: 0.85rem;
-      position: relative;
-      z-index: 1;
-    }
-
     @media (max-width: 600px) {
-      .hero-name {
-        font-size: 3rem;
-      }
-
-      .hero-desc {
-        font-size: 1rem;
-      }
-
-      .social-item {
-        padding: 12px 15px;
-      }
-
-      .social-handle {
-        display: block;
-        margin-left: 0;
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .ist-time {
+      .name {
         font-size: 2rem;
       }
     }
@@ -590,114 +351,85 @@
   </video>
   <div class="bg-overlay"></div>
 
-  <nav>
-    <div class="nav-inner">
-      <div class="nav-brand" onclick="window.location.href='index.html'">
-        <img src="https://i.ibb.co/gZx6TmQS/image-112855f5.png" alt="Logo" id="navLogo">
-        <span class="nav-title" id="typingText"></span><span class="typing-cursor"></span>
-      </div>
-      <div class="nav-links">
-        <button class="back-btn" onclick="window.location.href='index.html'">
-          <i class="fas fa-arrow-left"></i> Back
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <div class="scroller blurred" id="mainScroller">
-    <div class="section hero" id="section-hero">
-      <div class="section-content" data-animate>
-        <img src="" alt="Deathy" class="hero-logo" id="devAvatar" />
-        <div class="hero-greeting">hey, i'm</div>
-        <h1 class="hero-name" id="devName">deathy.</h1>
-        <div class="hero-desc">
-          just a random person ^^
-          <br><br>
-          mostly self-taught, probably listening to
-          <br>
-          music right now.
-        </div>
-
-        <div class="views-counter">
-          <div class="views-label">views</div>
-          <div class="views-number" id="uniqueViews">0</div>
-        </div>
-
-        <div class="ist-clock">
-          <div class="ist-label">IST Time</div>
-          <div class="ist-time" id="istTime">--:--:--</div>
-          <div class="ist-date" id="istDate">Loading...</div>
-        </div>
-
-        <div class="tagline">scroll to explore</div>
-        <div class="scroll-indicator">↓</div>
+  <div class="container blurred" id="mainContent">
+    <div class="header">
+      <img src="https://i.ibb.co/67mzvFbJ/4b7f9782977aea6e8a59dc9d6dae0317.gif" alt="Nyx" class="avatar" id="avatarImg" />
+      <h1 class="name" id="nameText">Nyx</h1>
+      <div class="title" id="titleText">Web Development & Discord Bot Developer</div>
+      <div class="meta-row">
+        <span class="meta-item">15</span>
+        <span>·</span>
+        <span class="meta-item">New Delhi, India</span>
+        <span>·</span>
+        <span class="meta-item" id="istTime">--:--:--</span>
+        <span>·</span>
+        <span class="meta-item" id="weather"><i class="fas fa-cloud-sun"></i> --°</span>
       </div>
     </div>
 
-    <div class="section" id="section-socials">
-      <div class="section-content" data-animate>
-        <div class="section-header">find me at</div>
-        <div class="socials-list">
-          <div class="social-item">
-            <span class="online-dot" id="statusDot"></span>
-            <span class="social-name" id="devStatusText">Loading...</span>
-          </div>
-          <a href="https://github.com/dontcare-dev" target="_blank" class="social-item">
-            <i class="fab fa-github social-icon"></i>
-            <span class="social-name">github</span>
-            <span class="social-handle">/ dontcare-dev</span>
-          </a>
-          <a href="https://dontcare-dev.github.io/Deathy.2v.dev/" target="_blank" class="social-item">
-            <i class="fas fa-globe social-icon"></i>
-            <span class="social-name">portfolio</span>
-            <span class="social-handle">/ Deathy.2v.dev</span>
-          </a>
-          <a href="#" id="devDiscordLink" class="social-item">
-            <i class="fab fa-discord social-icon"></i>
-            <span class="social-name">discord</span>
-            <span class="social-handle">/ @deathy</span>
-          </a>
+    <div class="section">
+      <div class="section-title">About</div>
+      <p class="about-text">Hey! I'm Nyx, 15 years old. I'm a web developer and Discord bot developer. Currently working on making cool stuff with Python, Go, and JavaScript.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Stack</div>
+      <div class="stack-list">
+        <div class="stack-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 440"><path d="M219.2 20.2c-54.3 0-51 23.5-51 23.5l.1 24.3h52.3v7.4H147.2s-44.5-5.2-44.5 44.5v37.6c0 0-1.7 40.8 39.1 40.8h26v-36.6s-.3-44 43.1-44h72.2s40.2.3 40.2-39.7v-49.3s4.2-48.2-51-48.2h-53.1z" fill="#3776AB"/><path d="M220.8 419.8c54.3 0 51-23.5 51-23.5l-.1-24.3H219.4v-7.4h73.4s44.5 5.2 44.5-44.5v-37.6c0 0 1.7-40.8-39.1-40.8h-26v36.6s.3 44-43.1 44h-72.2s-40.2-.3-40.2 39.7v49.3s-4.2 48.2 51 48.2h53.1z" fill="#FFD343"/><circle cx="173.3" cy="57.3" r="11" fill="#FFF"/><circle cx="266.8" cy="382.7" r="11" fill="#FFF"/></svg>
+          Python
+        </div>
+        <div class="stack-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 50"><path d="M29.5 24.9c0 8.8-6.1 14.8-14.8 14.8S0 33.7 0 24.9 6.1 10.1 14.8 10.1s14.7 6 14.7 14.8zm-23.3 0c0 5.6 3.6 9.4 8.5 9.4s8.5-3.8 8.5-9.4-3.6-9.4-8.5-9.4-8.5 3.8-8.5 9.4z" fill="#00ADD8"/><path d="M57.6 38.6c-4.4 0-7.7-1.9-9.5-5.2l4.9-2.9c1.2 1.9 2.8 2.8 4.7 2.8 2.6 0 3.9-1.3 3.9-3.2v-2.1h-.1c-1.3 2-3.8 3.4-7.1 3.4-6.8 0-11.9-5.4-11.9-12.8s5.1-12.9 11.9-12.9c3.3 0 5.8 1.4 7.1 3.4h.1V11h5.3v21.3c0 4.1-2.4 6.3-9.3 6.3zm-.9-23.2c-4.3 0-7.3 3.2-7.3 7.5s3 7.5 7.3 7.5 7.3-3.2 7.3-7.5-3-7.5-7.3-7.5z" fill="#00ADD8"/></svg>
+          Golang
+        </div>
+        <div class="stack-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 630 630"><rect width="630" height="630" fill="#F7DF1E"/><path d="m361.5 455.1 23.3-14.2c6.1 10.2 11.4 18.7 25 18.7 12 0 19.3-5.2 19.3-25.3v-176h29.5v176.4c0 36.6-21.3 54.1-48.4 54.1-28.7-.1-42.5-16.7-48.7-33.7zm116.5-22.6 22.6-13.1c8.7 15.2 21.1 25.1 39.5 25.1 17.6 0 28.5-8.8 28.5-21 0-14.4-11.4-19.6-32.2-28.5-29.7-12.8-49.4-27.5-49.4-54.7 0-25.6 19.9-45.2 48.7-45.2 23.9 0 39.8 10.5 49.4 28.5l-21.4 13.7c-6.7-12.3-16.1-17.9-28-17.9-12.6 0-19.6 6.7-19.6 15.8 0 10.8 8.2 15.2 26.9 23.3 33.3 14.3 54.7 28.9 54.7 59.9 0 29.3-22.2 47.9-56.4 47.9-34.9-.1-53.5-16.7-63.2-43.8z" fill="#000"/></svg>
+          JavaScript
         </div>
       </div>
     </div>
 
-    <div class="section" id="section-projects">
-      <div class="section-content" data-animate>
-        <div class="section-header">projects</div>
-        <div class="projects-grid">
-          <a href="https://dontcare-dev.github.io/-/" target="_blank" class="project-card">
-            <div class="project-icon"><i class="fas fa-globe"></i></div>
-            <div class="project-name">Fisch Realm</div>
-            <div class="project-desc">Website for Discord server</div>
-          </a>
-          <a href="https://discord.com/oauth2/authorize?client_id=1537532403558518876" target="_blank" class="project-card">
-            <div class="project-icon"><i class="fas fa-robot"></i></div>
-            <div class="project-name">Numinous</div>
-            <div class="project-desc">Discord bot with music</div>
-          </a>
-          <a href="https://discord.gg/fischrealm" target="_blank" class="project-card">
-            <div class="project-icon"><i class="fas fa-server"></i></div>
-            <div class="project-name">Servers</div>
-            <div class="project-desc">Using my bot</div>
-          </a>
+    <div class="section">
+      <div class="section-title">Projects</div>
+      <a href="https://dontcare-dev.github.io/-/" target="_blank" class="project-card">
+        <img src="https://i.ibb.co/BVrjQRtC/3bc7e9a7e862e4e724308a1257c283d4.jpg" alt="Project" class="project-image" />
+        <div class="project-info">
+          <div class="project-title">&lt;/&gt;</div>
+          <div class="project-desc">A cool bot made by nyx</div>
         </div>
+        <i class="fas fa-arrow-right project-arrow"></i>
+      </a>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Connect</div>
+      <a href="https://github.com/dontcare-dev" target="_blank" class="connect-item">
+        <i class="fab fa-github connect-icon"></i>
+        <span class="connect-label">GitHub</span>
+      </a>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Leave a Note</div>
+      <div class="guestbook-form">
+        <input type="text" class="form-input" id="guestName" placeholder="Your name" />
+        <textarea class="form-input form-textarea" id="guestMessage" placeholder="Say something..."></textarea>
+        <button class="send-btn" id="sendBtn">Send</button>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>© 2026 Deathy</p>
+    <p>© 2026 Nyx</p>
   </footer>
 
   <div class="notice-overlay" id="noticeOverlay">
     <div class="notice-box">
-      <div class="ascii-art" id="asciiArtContainer"></div>
       <div class="notice-icon"><i class="fas fa-exclamation-triangle"></i></div>
       <div class="notice-title">Notice</div>
-      <p class="notice-text">After August 4 I will be focusing fully on exams so services will be down!</p>
-      <div class="notice-buttons">
-        <button class="btn btn-white" onclick="acceptNotice()"><i class="fas fa-check"></i> OK</button>
-      </div>
+      <p class="notice-text">hey hey hey I know I ain't been good but everyone deserves a second chance right</p>
+      <button class="btn-white" onclick="acceptNotice()">OK</button>
     </div>
   </div>
 
@@ -770,81 +502,31 @@
       try {
         const res = await fetch(LANYARD_URL);
         const data = await res.json();
-        if (data.success) updateUI(data.data);
-        else throw new Error('Invalid response');
+        if (data.success) {
+          const u = data.data.discord_user;
+          const avatarUrl = `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=256`;
+          document.getElementById('avatarImg').src = avatarUrl;
+          document.getElementById('nameText').textContent = u.global_name || u.username;
+        }
       } catch (err) {
-        document.getElementById('devName').textContent = 'deathy';
-        document.getElementById('devStatusText').textContent = 'Offline';
-        document.getElementById('statusDot').style.background = '#747f8d';
-        document.getElementById('devAvatar').src = 'https://cdn.discordapp.com/avatars/1418597263479144471/unknown.png?size=128';
+        console.log('Lanyard error:', err);
       }
-    }
-
-    function updateUI(data) {
-      const avatarUrl = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=128`;
-      document.getElementById('devAvatar').src = avatarUrl;
-      document.getElementById('navLogo').src = avatarUrl;
-      document.getElementById('devName').textContent = (data.discord_user.global_name || data.discord_user.username).toLowerCase();
-      const status = data.discord_status || 'offline';
-      const statusMap = { online: 'Online', idle: 'Idle', dnd: 'Do Not Disturb', offline: 'Offline' };
-      document.getElementById('devStatusText').textContent = statusMap[status] || 'Offline';
-      document.getElementById('devDiscordLink').href = `https://discord.com/users/${data.discord_user.id}`;
     }
 
     fetchLanyard();
 
-    const asciiArt = `
-      ██████╗ ███████╗ █████╗ ████████╗██╗  ██╗██╗   ██╗
-      ██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██║  ██║╚██╗ ██╔╝
-      ██║  ██║█████╗  ███████║   ██║   ███████║ ╚████╔╝ 
-      ██║  ██║██╔══╝  ██╔══██║   ██║   ██╔══██║  ╚██╔╝  
-      ██████╔╝███████╗██║  ██║   ██║   ██║  ██║   ██║   
-      ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   
-    `;
-
-    document.getElementById('asciiArtContainer').textContent = asciiArt;
-
-    function acceptNotice() {
-      if (hasEntered) return;
-      hasEntered = true;
-
-      const overlay = document.getElementById('noticeOverlay');
-      const mainScroller = document.getElementById('mainScroller');
-
-      overlay.style.display = 'none';
-      mainScroller.classList.remove('blurred');
-
-      startMusic();
-
-      observeSections();
+    async function fetchWeather() {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&current_weather=true');
+        const data = await res.json();
+        const temp = Math.round(data.current_weather.temperature);
+        document.getElementById('weather').innerHTML = `<i class="fas fa-cloud-sun"></i> ${temp}°`;
+      } catch (err) {
+        console.log('Weather error:', err);
+      }
     }
 
-    const phrases = ["money $ bitch"];
-    const typingElement = document.getElementById('typingText');
-    let phraseIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    function type() {
-      const currentPhrase = phrases[phraseIndex];
-      if (isDeleting) {
-        typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
-        charIndex--;
-      } else {
-        typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
-        charIndex++;
-      }
-      let speed = isDeleting ? 50 : 100;
-      if (!isDeleting && charIndex === currentPhrase.length) {
-        speed = 2000;
-        isDeleting = true;
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-        speed = 500;
-      }
-      setTimeout(type, speed);
-    }
-    setTimeout(type, 500);
+    fetchWeather();
 
     function updateISTClock() {
       const now = new Date();
@@ -860,46 +542,59 @@
       hours = hours.toString().padStart(2, '0');
 
       document.getElementById('istTime').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-
-      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-      const dayName = days[istTime.getDay()];
-      const monthName = months[istTime.getMonth()];
-      const date = istTime.getDate();
-      const year = istTime.getFullYear();
-
-      document.getElementById('istDate').textContent = `${dayName}, ${monthName} ${date}, ${year}`;
     }
 
     updateISTClock();
     setInterval(updateISTClock, 1000);
 
-    function observeSections() {
-      const sections = document.querySelectorAll('.section-content[data-animate]');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          } else {
-            entry.target.classList.remove('visible');
-          }
-        });
-      }, { threshold: 0.3 });
-      sections.forEach(section => observer.observe(section));
+    function acceptNotice() {
+      if (hasEntered) return;
+      hasEntered = true;
+
+      const overlay = document.getElementById('noticeOverlay');
+      const mainContent = document.getElementById('mainContent');
+
+      overlay.style.display = 'none';
+      mainContent.classList.remove('blurred');
+
+      startMusic();
     }
 
-    async function trackView() {
-      try {
-        const res = await fetch('https://interapi.dev/v2/deathy-portfolio-views/');
-        const data = await res.json();
-        document.getElementById('uniqueViews').textContent = data.value || 0;
-      } catch (e) {
-        document.getElementById('uniqueViews').textContent = '0';
+    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1547260141886504981/HhrnHTnqbpLoTJsdSaAtA-jqleiXyawRkGvz5x5dfPytxIPoHpPJbgeYzvUlsIG-pdTm';
+
+    document.getElementById('sendBtn').addEventListener('click', async function() {
+      const name = document.getElementById('guestName').value;
+      const message = document.getElementById('guestMessage').value;
+
+      if (!name || !message) {
+        alert('Please fill in both fields!');
+        return;
       }
-    }
 
-    trackView();
+      const payload = {
+        content: `**${name}** says:\n${message}`
+      };
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          document.getElementById('guestName').value = '';
+          document.getElementById('guestMessage').value = '';
+          alert('Note sent successfully!');
+        } else {
+          alert('Failed to send note.');
+        }
+      } catch (err) {
+        alert('Error sending note.');
+      }
+    });
   </script>
 </body>
 </html>
