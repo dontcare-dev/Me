@@ -239,13 +239,6 @@
       -webkit-backdrop-filter: blur(5px);
     }
 
-    .views-counter img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      display: block;
-    }
-
     .views-label {
       font-size: 0.7rem;
       color: #aaa;
@@ -253,6 +246,14 @@
       letter-spacing: 2px;
       margin-bottom: 8px;
       font-weight: 600;
+    }
+
+    .views-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255,255,255,0.5);
     }
 
     .ist-clock {
@@ -619,7 +620,7 @@
 
         <div class="views-counter">
           <div class="views-label">views</div>
-          <div id="uniqueViews">0</div>
+          <div class="views-number" id="uniqueViews">0</div>
         </div>
 
         <div class="ist-clock">
@@ -887,6 +888,18 @@
       }, { threshold: 0.3 });
       sections.forEach(section => observer.observe(section));
     }
+
+    async function trackView() {
+      try {
+        const res = await fetch('https://interapi.dev/v2/deathy-portfolio-views/');
+        const data = await res.json();
+        document.getElementById('uniqueViews').textContent = data.value || 0;
+      } catch (e) {
+        document.getElementById('uniqueViews').textContent = '0';
+      }
+    }
+
+    trackView();
   </script>
 </body>
 </html>
