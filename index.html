@@ -2,8 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Nyx</title>
+  <meta name="description" content="meowmreow >:3" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Nyx" />
+  <meta property="og:description" content="meowmreow >:3" />
+  <meta property="og:image" content="https://i.ibb.co/wNcFcSRw/file-000000006a2c81fda485dd7b28e512b2.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nyx" />
+  <meta name="twitter:description" content="meowmreow >:3" />
+  <meta name="twitter:image" content="https://i.ibb.co/wNcFcSRw/file-000000006a2c81fda485dd7b28e512b2.png" />
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +30,14 @@
       line-height: 1.6;
       overflow-x: hidden;
       min-height: 100vh;
+      touch-action: pan-y;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    * { cursor: none; }
+    a, button, input, textarea, [role="button"] { cursor: none; }
+    @media (hover: none) {
+      * { cursor: auto; }
     }
 
     #starfield {
@@ -27,6 +47,74 @@
       z-index: 0;
       pointer-events: none;
     }
+
+    #cursorParticles {
+      position: fixed;
+      inset: 0;
+      width: 100vw; height: 100vh;
+      z-index: 99998;
+      pointer-events: none;
+    }
+
+    #cur {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      pointer-events: none;
+    }
+
+    .cur-dot {
+      position: absolute;
+      top: 0; left: 0;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow:
+        0 0 8px rgba(200, 220, 255, 0.95),
+        0 0 18px rgba(140, 180, 255, 0.6),
+        0 0 32px rgba(120, 160, 255, 0.35);
+      transform: translate(-100px, -100px);
+      will-change: transform, opacity;
+      transition: width 0.15s ease, height 0.15s ease, box-shadow 0.15s ease, opacity 0.3s ease;
+      opacity: 1;
+    }
+
+    .cur-dot.pressing {
+      width: 9px;
+      height: 9px;
+      box-shadow:
+        0 0 12px rgba(220, 230, 255, 1),
+        0 0 26px rgba(160, 190, 255, 0.75),
+        0 0 44px rgba(120, 160, 255, 0.45);
+    }
+
+    .cur-dot.hidden { opacity: 0; }
+
+    .cur-ring {
+      position: absolute;
+      top: 0; left: 0;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 220, 255, 0.35);
+      background: radial-gradient(circle, rgba(180,210,255,0.06) 0%, transparent 70%);
+      box-shadow: 0 0 14px rgba(140, 180, 255, 0.18);
+      transform: translate(-100px, -100px);
+      will-change: transform, opacity;
+      transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease;
+      opacity: 1;
+    }
+
+    .cur-ring.hover {
+      width: 58px;
+      height: 58px;
+      border-color: rgba(255, 255, 255, 0.75);
+      background: radial-gradient(circle, rgba(180,210,255,0.14) 0%, transparent 70%);
+      box-shadow:
+        0 0 24px rgba(140, 180, 255, 0.45),
+        0 0 48px rgba(140, 180, 255, 0.25);
+    }
+
+    .cur-ring.hidden { opacity: 0; }
 
     #loader {
       position: fixed;
@@ -548,6 +636,8 @@
 <body>
 
   <canvas id="starfield"></canvas>
+  <canvas id="cursorParticles"></canvas>
+  <div id="cur"></div>
 
   <div id="loader">
     <div class="load-icon-wrap">
@@ -817,44 +907,407 @@
       }
     });
 
-    (function initStarfield() {
-      const canvas = document.getElementById('starfield');
+    (function initCursor() {
+      const canvas = document.getElementById('cursorParticles');
       const ctx = canvas.getContext('2d');
-      let width, height, stars = [], meteors = [];
+      const cursorRoot = document.getElementById('cur');
 
+      let W, H;
       function resize() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
       }
       window.addEventListener('resize', resize);
       resize();
 
-      const STAR_COUNT = Math.floor((width * height) / 2200);
+      function makeGlowDot(size, r, g, b) {
+        const c = document.createElement('canvas');
+        c.width = c.height = size;
+        const x = c.getContext('2d');
+        const half = size / 2;
+        const grad = x.createRadialGradient(half, half, 0, half, half, half);
+        grad.addColorStop(0, `rgba(${r},${g},${b},1)`);
+        grad.addColorStop(0.25, `rgba(${r},${g},${b},0.55)`);
+        grad.addColorStop(0.55, `rgba(${r},${g},${b},0.12)`);
+        grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+        x.fillStyle = grad;
+        x.fillRect(0, 0, size, size);
+        return c;
+      }
+
+      const SPARKLE = {
+        blue: makeGlowDot(48, 180, 210, 255),
+        gold: makeGlowDot(48, 255, 225, 170),
+        pink: makeGlowDot(48, 255, 185, 220),
+        cyan: makeGlowDot(48, 170, 240, 255),
+        white: makeGlowDot(48, 255, 255, 255)
+      };
+      const SPARKLE_KEYS = ['blue', 'blue', 'blue', 'gold', 'pink', 'cyan', 'white'];
+      function pickSparkle() { return SPARKLE_KEYS[Math.floor(Math.random() * SPARKLE_KEYS.length)]; }
+
+      function makeInkPuff(size, r, g, b, coreA) {
+        const c = document.createElement('canvas');
+        c.width = c.height = size;
+        const x = c.getContext('2d');
+        const half = size / 2;
+        const grad = x.createRadialGradient(half, half, 0, half, half, half);
+        grad.addColorStop(0, `rgba(${r},${g},${b},${coreA})`);
+        grad.addColorStop(0.3, `rgba(${r},${g},${b},${coreA * 0.6})`);
+        grad.addColorStop(0.6, `rgba(${r},${g},${b},${coreA * 0.22})`);
+        grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+        x.fillStyle = grad;
+        x.fillRect(0, 0, size, size);
+        return c;
+      }
+
+      const INK = [
+        makeInkPuff(64, 12, 10, 20, 1),
+        makeInkPuff(64, 20, 17, 30, 1),
+        makeInkPuff(64, 30, 26, 42, 0.95),
+        makeInkPuff(64, 45, 38, 60, 0.8),
+        makeInkPuff(64, 65, 55, 85, 0.55)
+      ];
+
+      const sparkles = [];
+      const inks = [];
+
+      const mouseRing = document.createElement('div');
+      mouseRing.className = 'cur-ring';
+      cursorRoot.appendChild(mouseRing);
+
+      const mouseDot = document.createElement('div');
+      mouseDot.className = 'cur-dot';
+      cursorRoot.appendChild(mouseDot);
+
+      let mx = -100, my = -100;
+      let dotX = -100, dotY = -100;
+      let ringX = -100, ringY = -100;
+      let lastMX = -100, lastMY = -100;
+      let mouseActive = false;
+      let isDown = false;
+
+      function spawnSparkle(x, y) {
+        sparkles.push({
+          x: x + (Math.random() - 0.5) * 6,
+          y: y + (Math.random() - 0.5) * 6,
+          vx: (Math.random() - 0.5) * 0.7,
+          vy: (Math.random() - 0.5) * 0.7 - 0.25,
+          life: 1,
+          decay: 0.018 + Math.random() * 0.022,
+          size: 0.8 + Math.random() * 1.8,
+          sprite: SPARKLE[pickSparkle()]
+        });
+      }
+
+      function sparklesAlong(x0, y0, x1, y1) {
+        const dx = x1 - x0, dy = y1 - y0;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 1.2) return;
+        const count = Math.min(3, Math.max(1, Math.floor(dist / 14)));
+        for (let i = 0; i < count; i++) {
+          const t = i / count;
+          spawnSparkle(x0 + dx * t, y0 + dy * t);
+        }
+      }
+
+      function sparkleBurst(x, y) {
+        for (let i = 0; i < 22; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const s = 1.2 + Math.random() * 3.2;
+          sparkles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(a) * s,
+            vy: Math.sin(a) * s,
+            life: 1,
+            decay: 0.012 + Math.random() * 0.022,
+            size: 1 + Math.random() * 2.4,
+            sprite: SPARKLE[pickSparkle()]
+          });
+        }
+      }
+
+      function inkDrag(x, y) {
+        const count = 5 + Math.floor(Math.random() * 5);
+        for (let i = 0; i < count; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const sp = 0.5 + Math.random() * 2.8;
+          inks.push({
+            x: x + (Math.random() - 0.5) * 6,
+            y: y + (Math.random() - 0.5) * 6,
+            vx: Math.cos(a) * sp,
+            vy: Math.sin(a) * sp - 0.1,
+            size: 0.4 + Math.random() * 1.5,
+            life: 1,
+            decay: 0.09 + Math.random() * 0.07,
+            sprite: INK[Math.floor(Math.random() * INK.length)],
+            rot: Math.random() * Math.PI * 2,
+            rotV: (Math.random() - 0.5) * 0.05
+          });
+        }
+      }
+
+      function inkBurst(x, y, count) {
+        for (let i = 0; i < count; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const sp = 0.6 + Math.random() * 3.2;
+          inks.push({
+            x: x + (Math.random() - 0.5) * 4,
+            y: y + (Math.random() - 0.5) * 4,
+            vx: Math.cos(a) * sp,
+            vy: Math.sin(a) * sp,
+            size: 0.5 + Math.random() * 1.8,
+            life: 1,
+            decay: 0.1 + Math.random() * 0.08,
+            sprite: INK[Math.floor(Math.random() * INK.length)],
+            rot: Math.random() * Math.PI * 2,
+            rotV: (Math.random() - 0.5) * 0.06
+          });
+        }
+      }
+
+      const touchPointers = new Map();
+
+      function ensureTouchPointer(e) {
+        let p = touchPointers.get(e.pointerId);
+        if (!p) {
+          const dotEl = document.createElement('div');
+          dotEl.className = 'cur-dot pressing';
+          cursorRoot.appendChild(dotEl);
+          p = {
+            dotEl,
+            x: e.clientX, y: e.clientY,
+            dotX: e.clientX, dotY: e.clientY,
+            lastX: e.clientX, lastY: e.clientY
+          };
+          touchPointers.set(e.pointerId, p);
+        }
+        return p;
+      }
+
+      window.addEventListener('pointerdown', function(e) {
+        if (e.pointerType === 'mouse') {
+          isDown = true;
+          mouseDot.classList.add('pressing');
+          sparkleBurst(e.clientX, e.clientY);
+        } else {
+          const p = ensureTouchPointer(e);
+          p.x = e.clientX; p.y = e.clientY;
+          p.dotX = e.clientX; p.dotY = e.clientY;
+          p.lastX = e.clientX; p.lastY = e.clientY;
+          inkBurst(e.clientX, e.clientY, 16);
+        }
+      }, { passive: true });
+
+      window.addEventListener('pointermove', function(e) {
+        if (e.pointerType === 'mouse') {
+          mx = e.clientX; my = e.clientY;
+          if (!mouseActive) {
+            mouseActive = true;
+            dotX = ringX = mx;
+            dotY = ringY = my;
+          }
+
+          if (isDown) {
+            const dist = Math.hypot(mx - lastMX, my - lastMY);
+            if (dist > 2) {
+              inkDrag(mx, my);
+            }
+          } else {
+            sparklesAlong(lastMX, lastMY, mx, my);
+          }
+
+          lastMX = mx;
+          lastMY = my;
+        } else {
+          const p = touchPointers.get(e.pointerId);
+          if (!p) return;
+          const dist = Math.hypot(e.clientX - p.lastX, e.clientY - p.lastY);
+          if (dist > 2) {
+            inkDrag(e.clientX, e.clientY);
+          }
+          p.x = e.clientX; p.y = e.clientY;
+          p.lastX = e.clientX; p.lastY = e.clientY;
+        }
+      }, { passive: true });
+
+      function releasePointer(e) {
+        if (e.pointerType === 'mouse') {
+          isDown = false;
+          mouseDot.classList.remove('pressing');
+        } else {
+          const p = touchPointers.get(e.pointerId);
+          if (!p) return;
+          p.dotEl.classList.add('hidden');
+          const el = p.dotEl;
+          touchPointers.delete(e.pointerId);
+          setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 350);
+        }
+      }
+
+      window.addEventListener('pointerup', releasePointer, { passive: true });
+      window.addEventListener('pointercancel', releasePointer, { passive: true });
+
+      window.addEventListener('blur', function() {
+        isDown = false;
+        mouseDot.classList.remove('pressing');
+        touchPointers.forEach(function(p) {
+          p.dotEl.classList.add('hidden');
+          const el = p.dotEl;
+          setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 350);
+        });
+        touchPointers.clear();
+      });
+
+      const hoverSel = 'a, button, input, textarea, .stack-item, .project-card, .menu-btn, .topbar-logo, .send-btn, .okay-btn, .enter-btn, .form-input';
+      document.addEventListener('mouseover', function(e) {
+        if (e.target.closest(hoverSel)) mouseRing.classList.add('hover');
+      });
+      document.addEventListener('mouseout', function(e) {
+        if (e.target.closest(hoverSel)) mouseRing.classList.remove('hover');
+      });
+
+      function animate() {
+        ctx.clearRect(0, 0, W, H);
+
+        if (mouseActive) {
+          dotX += (mx - dotX) * 0.4;
+          dotY += (my - dotY) * 0.4;
+          ringX += (mx - ringX) * 0.15;
+          ringY += (my - ringY) * 0.15;
+          mouseDot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%, -50%)`;
+          mouseRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+        }
+
+        touchPointers.forEach(function(p) {
+          p.dotX += (p.x - p.dotX) * 0.45;
+          p.dotY += (p.y - p.dotY) * 0.45;
+          p.dotEl.style.transform = `translate(${p.dotX}px, ${p.dotY}px) translate(-50%, -50%)`;
+        });
+
+        ctx.globalCompositeOperation = 'lighter';
+
+        for (let i = sparkles.length - 1; i >= 0; i--) {
+          const p = sparkles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.965;
+          p.vy *= 0.965;
+          p.vy += 0.012;
+          p.life -= p.decay;
+          if (p.life <= 0) { sparkles.splice(i, 1); continue; }
+
+          const alpha = p.life * p.life * 0.9;
+          const s = p.size * 6;
+          ctx.globalAlpha = alpha;
+          ctx.drawImage(p.sprite, p.x - s / 2, p.y - s / 2, s, s);
+        }
+
+        for (let i = inks.length - 1; i >= 0; i--) {
+          const p = inks[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vx *= 0.94;
+          p.vy *= 0.94;
+          p.vy += 0.02;
+          p.rot += p.rotV;
+          p.life -= p.decay;
+
+          if (p.life <= 0) { inks.splice(i, 1); continue; }
+
+          const alpha = p.life;
+          const s = p.size * 11;
+          ctx.globalAlpha = alpha * 0.92;
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.drawImage(p.sprite, -s / 2, -s / 2, s, s);
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'source-over';
+
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    (function initStarfield() {
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let W, H, stars = [], meteors = [];
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function makeGlow(size, r, g, b) {
+        const c = document.createElement('canvas');
+        c.width = c.height = size;
+        const x = c.getContext('2d');
+        const half = size / 2;
+        const grad = x.createRadialGradient(half, half, 0, half, half, half);
+        grad.addColorStop(0, `rgba(${r},${g},${b},1)`);
+        grad.addColorStop(0.2, `rgba(${r},${g},${b},0.55)`);
+        grad.addColorStop(0.5, `rgba(${r},${g},${b},0.14)`);
+        grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+        x.fillStyle = grad;
+        x.fillRect(0, 0, size, size);
+        return c;
+      }
+
+      const GLOW = {
+        white: makeGlow(64, 255, 255, 255),
+        blue:  makeGlow(64, 195, 215, 255),
+        warm:  makeGlow(64, 255, 232, 205)
+      };
+
+      const colorPool = ['white','white','white','white','white','white','white','blue','warm','blue'];
+      function pickColor() { return colorPool[Math.floor(Math.random() * colorPool.length)]; }
 
       function createStars() {
         stars = [];
-        for (let i = 0; i < STAR_COUNT; i++) {
+        const count = Math.floor((W * H) / 1800);
+        for (let i = 0; i < count; i++) {
           const roll = Math.random();
-          let r, baseOpacity;
-          if (roll > 0.985) { r = Math.random() * 1.8 + 1.2; baseOpacity = Math.random() * 0.5 + 0.5; }
-          else if (roll > 0.85) { r = Math.random() * 0.9 + 0.6; baseOpacity = Math.random() * 0.5 + 0.35; }
-          else { r = Math.random() * 0.5 + 0.15; baseOpacity = Math.random() * 0.5 + 0.2; }
+          let tier;
+          if (roll > 0.99) tier = 3;
+          else if (roll > 0.94) tier = 2;
+          else if (roll > 0.75) tier = 1;
+          else tier = 0;
+
+          let r;
+          if (tier === 0) r = 0.35 + Math.random() * 0.5;
+          else if (tier === 1) r = 0.65 + Math.random() * 0.55;
+          else if (tier === 2) r = 1.0 + Math.random() * 0.7;
+          else r = 1.6 + Math.random() * 1.0;
+
           stars.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            r: r, baseOpacity: baseOpacity,
-            twinkleSpeed: Math.random() * 0.025 + 0.004,
-            phase: Math.random() * Math.PI * 2,
-            hue: Math.random() > 0.85 ? (Math.random() > 0.5 ? 200 : 40) : null
+            x: Math.random() * W,
+            y: Math.random() * H,
+            tier,
+            r,
+            base: 0.5 + Math.random() * 0.5,
+            color: tier >= 2 ? pickColor() : (Math.random() < 0.86 ? 'white' : pickColor()),
+            f1: 0.5 + Math.random() * 2.0,
+            f2: 0.4 + Math.random() * 3.6,
+            f3: 1.0 + Math.random() * 5.5,
+            p1: Math.random() * Math.PI * 2,
+            p2: Math.random() * Math.PI * 2,
+            p3: Math.random() * Math.PI * 2,
+            steady: Math.random() < 0.55
           });
         }
       }
       createStars();
 
       function createMeteor() {
-        const startX = Math.random() * width * 0.9 + width * 0.1;
-        const startY = Math.random() * height * 0.4;
-        const length = Math.random() * 150 + 100;
+        const startX = Math.random() * W * 0.9 + W * 0.1;
+        const startY = Math.random() * H * 0.4;
+        const length = Math.random() * 170 + 120;
         const angle = Math.PI * 0.75;
         const speed = Math.random() * 4 + 3;
         meteors.push({
@@ -867,59 +1320,83 @@
       }
 
       let lastMeteor = 0;
+      const startT = performance.now();
 
-      function animate(timestamp) {
-        ctx.clearRect(0, 0, width, height);
+      function animate(ts) {
+        const t = (ts - startT) / 1000;
+        ctx.clearRect(0, 0, W, H);
+
         for (let i = 0; i < stars.length; i++) {
           const s = stars[i];
-          const twinkle = Math.sin(timestamp * s.twinkleSpeed + s.phase) * 0.5 + 0.5;
-          const opacity = s.baseOpacity * (0.3 + twinkle * 0.7);
-          let color;
-          if (s.hue === 200) color = `rgba(180, 210, 255, ${opacity})`;
-          else if (s.hue === 40) color = `rgba(255, 235, 180, ${opacity})`;
-          else color = `rgba(255, 255, 255, ${opacity})`;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = color;
-          ctx.fill();
-          if (s.r > 0.7) {
+
+          let bright;
+          if (s.steady) {
+            bright = s.base * (0.85 + Math.sin(t * s.f1 + s.p1) * 0.15);
+          } else {
+            const n1 = Math.sin(t * s.f1 + s.p1);
+            const n2 = Math.sin(t * s.f2 + s.p2);
+            const n3 = Math.sin(t * s.f3 + s.p3);
+            const noise = n1 * 0.5 + n2 * 0.3 + n3 * 0.2;
+            bright = s.base * (0.55 + noise * 0.45);
+          }
+          if (bright < 0) bright = 0;
+
+          if (s.tier === 0) {
+            ctx.globalAlpha = bright;
+            ctx.fillStyle = '#fff';
             ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r * 3.5, 0, Math.PI * 2);
-            ctx.fillStyle = s.hue === 200
-              ? `rgba(180, 210, 255, ${opacity * 0.12})`
-              : s.hue === 40
-              ? `rgba(255, 235, 180, ${opacity * 0.12})`
-              : `rgba(180, 200, 255, ${opacity * 0.1})`;
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            const glowSize = s.r * (s.tier === 3 ? 16 : s.tier === 2 ? 10 : 6);
+            const sprite = GLOW[s.color];
+            ctx.globalAlpha = bright * (s.tier === 3 ? 0.95 : s.tier === 2 ? 0.7 : 0.42);
+            ctx.drawImage(sprite, s.x - glowSize / 2, s.y - glowSize / 2, glowSize, glowSize);
+
+            ctx.globalAlpha = Math.min(1, bright * 1.15);
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r * 0.85, 0, Math.PI * 2);
             ctx.fill();
           }
         }
-        if (timestamp - lastMeteor > 1200 + Math.random() * 2000) {
-          createMeteor(); lastMeteor = timestamp;
+        ctx.globalAlpha = 1;
+
+        if (ts - lastMeteor > 1400 + Math.random() * 2400) {
+          createMeteor();
+          lastMeteor = ts;
         }
+
         for (let i = meteors.length - 1; i >= 0; i--) {
           const m = meteors[i];
           const tailX = m.x - m.vx * (m.length / 20);
           const tailY = m.y - m.vy * (m.length / 20);
           const gradient = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
           gradient.addColorStop(0, `rgba(255, 255, 255, ${m.life})`);
-          gradient.addColorStop(0.3, `rgba(200, 220, 255, ${m.life * 0.6})`);
-          gradient.addColorStop(1, `rgba(150, 180, 255, 0)`);
+          gradient.addColorStop(0.3, `rgba(210, 225, 255, ${m.life * 0.55})`);
+          gradient.addColorStop(1, `rgba(170, 195, 255, 0)`);
           ctx.beginPath();
           ctx.strokeStyle = gradient;
-          ctx.lineWidth = 2; ctx.lineCap = 'round';
-          ctx.moveTo(m.x, m.y); ctx.lineTo(tailX, tailY);
+          ctx.lineWidth = 1.6;
+          ctx.lineCap = 'round';
+          ctx.moveTo(m.x, m.y);
+          ctx.lineTo(tailX, tailY);
           ctx.stroke();
+
           ctx.beginPath();
-          ctx.arc(m.x, m.y, 2.5, 0, Math.PI * 2);
+          ctx.arc(m.x, m.y, 2, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(255, 255, 255, ${m.life})`;
           ctx.fill();
+
           ctx.beginPath();
-          ctx.arc(m.x, m.y, 8, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(200, 220, 255, ${m.life * 0.2})`;
+          ctx.arc(m.x, m.y, 7, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(210, 225, 255, ${m.life * 0.18})`;
           ctx.fill();
+
           m.x += m.vx; m.y += m.vy; m.life -= m.decay;
-          if (m.life <= 0 || m.x < -100 || m.y > height + 100) meteors.splice(i, 1);
+          if (m.life <= 0 || m.x < -100 || m.y > H + 100) meteors.splice(i, 1);
         }
+
         requestAnimationFrame(animate);
       }
       requestAnimationFrame(animate);
